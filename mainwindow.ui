@@ -47,7 +47,7 @@
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
@@ -64,7 +64,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
             <widget class="QPushButton" name="btn_generate">
@@ -74,7 +74,14 @@
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="lv_fields"/>
+            <widget class="QTableWidget" name="tv_fields">
+             <property name="columnCount">
+              <number>3</number>
+             </property>
+             <column/>
+             <column/>
+             <column/>
+            </widget>
            </item>
           </layout>
          </widget>
