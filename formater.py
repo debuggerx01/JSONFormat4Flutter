@@ -6,30 +6,14 @@
 from functools import partial
 
 from mainwindow import *
-import json
 
 # 定义显示的json格式化字符串的缩进量为4个空格
+from tools import *
+
 indent = '    '
 
 # 临时存储
 last_list_com_box = None
-
-
-# 验证json字符串是否合法
-def is_json(myjson):
-    try:
-        json.loads(myjson)
-    except ValueError:
-        return False
-    return True
-
-
-# 传入未格式化的单行json字符串，返回指定缩进的多行json字符串
-def jformat(inp):
-    obj = json.loads(inp)
-    outp = json.dumps(obj, skipkeys=False, ensure_ascii=False, check_circular=True, allow_nan=True, cls=None, indent='  ', separators=None,
-                      default=None, sort_keys=True)
-    return outp
 
 
 def analyse_json_obj(json_obj, level=0, res=None, json_key=None):
@@ -65,7 +49,7 @@ def analyse_json_obj(json_obj, level=0, res=None, json_key=None):
         if json_key is None:
             res.append('%s<[list]>9' % (indent * level))
         else:
-            res.append('%s <%s> : <[list]>9' % (indent * level, json_key))
+            res.append('%s<%s> : <[list]>9' % (indent * level, json_key))
         if len(json_obj) > 0:
             analyse_json_obj(json_obj[0], level + 1, res)
 
@@ -96,6 +80,7 @@ def get_type_combobox(line):
     com_box = QtWidgets.QComboBox()
     com_box.setEditable(True)
     obj_type = int(line[-1]) if line[-1].isdigit() else 0
+    global last_list_com_box
 
     if last_list_com_box is not None:
         com_box.currentTextChanged.connect(partial(change_text, last_list_com_box))
@@ -115,7 +100,6 @@ def get_type_combobox(line):
     elif obj_type == 9:
         com_box.setCurrentText('List<>')
         # 将该list字段的编辑框临时保存，用于与下一个字段的类型绑定
-        global last_list_com_box
         last_list_com_box = com_box
 
     return com_box
@@ -177,7 +161,17 @@ def json_format():
 
 
 def generate_bean():
-    ui.te_json.setText("OK")
+    bean = []
+    for i in range(ui.tv_fields.rowCount()):
+        var_field = ui.tv_fields.cellWidget(i, 0)
+        var_type = ui.tv_fields.cellWidget(i, 1)
+        var_name = ui.tv_fields.cellWidget(i, 2)
+
+        bean.append([var_field, var_type, var_name])
+
+    res = check_and_generate_code(bean)
+    if res != '':
+        ui.te_json.setText(res)
 
 
 def init_event():
