@@ -120,7 +120,7 @@ def add_param_to_code(code, param):
     tcode = check_level_type(t)
 
     if tcode == 2:
-        code = code.replace(': $%s' % n, ': ${%s != null?\'\"$%s\"\':\'null\'}' % (n, n))
+        code = code.replace(': $%s' % n, ': ${%s != null?\'${JSON.encode(%s)}\':\'null\'}' % (n, n))
 
     # dict类型处理，只需要修改construction中的输出方式
     elif tcode == 4:

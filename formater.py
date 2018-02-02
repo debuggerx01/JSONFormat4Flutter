@@ -75,12 +75,23 @@ def change_text(com_box, current_text):
     com_box.setCurrentText('List<%s>' % current_text)
 
 
+def change_background_color(com_box, current_text):
+    if current_text == '':
+        com_box.setStyleSheet("background-color:rgb(220,20,60)")
+    elif current_text == 'Object':
+        com_box.setStyleSheet("background-color:rgb(255,246,143)")
+    else:
+        com_box.setStyleSheet("")
+
+
 # 生成字段类型下拉框
 def get_type_combobox(line):
     com_box = QtWidgets.QComboBox()
     com_box.setEditable(True)
     obj_type = int(line[-1]) if line[-1].isdigit() else 0
     global last_list_com_box
+
+    com_box.currentTextChanged.connect(partial(change_background_color, com_box))
 
     if last_list_com_box is not None:
         com_box.currentTextChanged.connect(partial(change_text, last_list_com_box))
@@ -102,6 +113,8 @@ def get_type_combobox(line):
         # 将该list字段的编辑框临时保存，用于与下一个字段的类型绑定
         last_list_com_box = com_box
 
+    # 为text至不合法的输入框设置颜色
+    change_background_color(com_box, com_box.currentText())
     return com_box
 
 
