@@ -23,6 +23,26 @@ ${construction}
 
 """
 
+template_list = r"""   
+${list_count}${class_type}${>count} ${name}${current_child} = [];
+for (var ${name}${current_items} in ${name}${parent_items}){
+    ${loop}
+    ${name}${current_child}.add(${name}${child_child});
+}
+"""
+
 
 def get_top_code_dict(t):
     return template_dict.replace('${type}', t)
+
+
+def get_list_code_loop(list_count, ct, ab_count, n, current_child, child_child, current_items, parent_items):
+    return template_list \
+        .replace('${list_count}', list_count) \
+        .replace('${class_type}', ct) \
+        .replace('${>count}', ab_count) \
+        .replace('${name}', n) \
+        .replace('${current_child}', current_child) \
+        .replace('${child_child}', child_child) \
+        .replace('${current_items}', current_items) \
+        .replace('${parent_items}', parent_items)

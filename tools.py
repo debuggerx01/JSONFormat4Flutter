@@ -8,7 +8,7 @@ import json
 from PyQt5.QtWidgets import QLabel, QComboBox, QMessageBox
 
 # 验证json字符串是否合法
-from template_code import get_top_code_dict
+from template_code import get_top_code_dict, get_list_code_loop
 
 msg_box_ui = None
 
@@ -44,14 +44,6 @@ def check_level_type(t):
 
 
 def list_code_loop(code, count, total, n, ct):
-    template = r"""   
-${list_count}${class_type}${>count} ${name}${current_child} = [];
-for (var ${name}${current_items} in ${name}${parent_items}){
-    ${loop}
-    ${name}${current_child}.add(${name}${child_child});
-}
-"""
-
     list_count = 'List<' * (total - count)
     ab_count = '>' * (total - count)
 
@@ -61,15 +53,7 @@ for (var ${name}${current_items} in ${name}${parent_items}){
     current_items = 'Item' * (count + 1)
     parent_items = 'Item' * count
 
-    fragment = template \
-        .replace('${list_count}', list_count) \
-        .replace('${class_type}', ct) \
-        .replace('${>count}', ab_count) \
-        .replace('${name}', n) \
-        .replace('${current_child}', current_child) \
-        .replace('${child_child}', child_child) \
-        .replace('${current_items}', current_items) \
-        .replace('${parent_items}', parent_items)
+    fragment = get_list_code_loop(list_count, ct, ab_count, n, current_child, child_child, current_items, parent_items)
 
     if code == '':
         return fragment
@@ -175,12 +159,15 @@ def build_level_code(level_bean):
 
 
 def generate_code(work_bean):
-    # 如果顶级容器为list而不是dict，则先在外面包一层dict，并将list的别名传递为dict的类型，list则重命名为'list'，
+    is_list_top = False
+
+    # 如果顶级容器为list而不是dict，则先在外面包一层dict，并将list的别名传递为dict的类型，list则重命名为'list'，并修改标志位供后面修改使用
     (l, f, t, n) = work_bean[0]
     if t.startswith('List<'):
         work_bean[0][3] = 'list'
         work_bean[0][1] = 'json_list'
         work_bean.insert(0, (-2, "", n, ""))
+        is_list_top = True
 
     build_level_code(work_bean)
 
@@ -192,11 +179,13 @@ def generate_code(work_bean):
 
     codes.clear()
 
-    # 最终修改，添加jsonStr解析为jsonRes代码
+    # 如果顶级容器为list,需要修改第一次获取JSON对象的方式为直接获取
+    if is_list_top:
+        res = res.replace('jsonRes[\'list\']', 'jsonRes', 1)
 
+    # 最终修改，添加jsonStr解析为jsonRes代码
     bp = res.find('(jsonRes) {')
     return 'import \'dart:convert\';\n' + res[:bp] + '(jsonStr) {\n  var jsonRes = JSON.decode(jsonStr);\n' + res[bp + 11:]
-
 
 
 def check_and_generate_code(bean):

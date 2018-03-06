@@ -7,9 +7,9 @@ from functools import partial
 
 from mainwindow import *
 
-# 定义显示的json格式化字符串的缩进量为4个空格
 from tools import *
 
+# 定义显示的json格式化字符串的缩进量为4个空格
 indent = '    '
 
 # 临时存储
@@ -211,7 +211,7 @@ def init_view():
     init_table()
 
 
-def customUI():
+def custom_ui():
     init_view()
     init_event()
 
@@ -224,6 +224,6 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(widget)
     # 在生成代码的基础上再修改UI以及添加逻辑
-    customUI()
+    custom_ui()
     widget.show()
     sys.exit(app.exec_())
