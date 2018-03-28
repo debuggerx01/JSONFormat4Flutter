@@ -20,7 +20,7 @@ class RegionResp {
 
   @override
   String toString() {
-    return '{"code": $code,"ttl": $ttl,"message": ${message != null ? '${JSON
+    return '{"code": $code,"ttl": $ttl,"message": ${message != null ? '${json
         .encode(message)}' : 'null'},"data": $data}';
   }
 }
@@ -113,14 +113,14 @@ class Arch {
   @override
   String toString() {
     return '{"aid": $aid,"attribute": $attribute,"copyright": $copyright,"ctime": $ctime,"duration": $duration,"pubdate": $pubdate,"state": $state,"tid": $tid,"videos": $videos,"desc": ${desc !=
-        null ? '${JSON.encode(desc)}' : 'null'},"dynamic": ${dynamic != null
-        ? '${JSON.encode(dynamic)}'
+        null ? '${json.encode(desc)}' : 'null'},"dynamic": ${dynamic != null
+        ? '${json.encode(dynamic)}'
         : 'null'},"pic": ${pic != null
-        ? '${JSON.encode(pic)}'
+        ? '${json.encode(pic)}'
         : 'null'},"title": ${title != null
-        ? '${JSON.encode(title)}'
+        ? '${json.encode(title)}'
         : 'null'},"tname": ${tname != null
-        ? '${JSON.encode(tname)}'
+        ? '${json.encode(tname)}'
         : 'null'},"owner": $owner,"rights": $rights,"stat": $stat}';
   }
 }
@@ -205,7 +205,7 @@ class Owner {
   String toString() {
     return '{"mid": $mid,"face": ${face != null
         ? '${JSON.encode(face)}'
-        : 'null'},"name": ${name != null ? '${JSON.encode(name)}' : 'null'}}';
+        : 'null'},"name": ${name != null ? '${json.encode(name)}' : 'null'}}';
   }
 }
 

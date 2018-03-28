@@ -104,7 +104,7 @@ def add_param_to_code(code, param):
     tcode = check_level_type(t)
 
     if tcode == 2:
-        code = code.replace(': $%s' % n, ': ${%s != null?\'${JSON.encode(%s)}\':\'null\'}' % (n, n))
+        code = code.replace(': $%s' % n, ': ${%s != null?\'${json.encode(%s)}\':\'null\'}' % (n, n))
 
     # dict类型处理，只需要修改construction中的输出方式
     elif tcode == 4:
@@ -185,7 +185,7 @@ def generate_code(work_bean):
 
     # 最终修改，添加jsonStr解析为jsonRes代码
     bp = res.find('(jsonRes) {')
-    return 'import \'dart:convert\';\n' + res[:bp] + '(jsonStr) {\n  var jsonRes = JSON.decode(jsonStr);\n' + res[bp + 11:]
+    return 'import \'dart:convert\' show json;\n' + res[:bp] + '(jsonStr) {\n  var jsonRes = json.decode(jsonStr);\n' + res[bp + 11:]
 
 
 def check_and_generate_code(bean):
