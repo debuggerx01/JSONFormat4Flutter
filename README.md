@@ -4,7 +4,7 @@
 用法：
 ![](https://github.com/debuggerx01/JSONFormat4Flutter/blob/master/Example/json.gif?raw=true)
 
-## 友情提示
+## MAC使用方法
 没有python运行环境的用户需要先安装python
 
 mac中可以使用如下命令安装
