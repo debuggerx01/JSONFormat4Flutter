@@ -29,7 +29,9 @@ ModuleNotFoundError: No module named 'PyQt5'
 
 ```
 
-这时候可以直接用`pip3 install PyQt5`
+这时候可以直接用
+`pip3 install PyQt5`
+`pip3 install pyperclip`
 等待安装完成
 
 后面使用就是在命令行敲入
