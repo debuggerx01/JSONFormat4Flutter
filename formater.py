@@ -6,7 +6,6 @@
 from functools import partial
 
 from mainwindow import *
-
 from tools import *
 
 # 定义显示的json格式化字符串的缩进量为4个空格
@@ -182,7 +181,12 @@ def generate_bean():
 
         bean.append([var_field, var_type, var_name])
 
-    res = check_and_generate_code(bean)
+    try:
+        res = check_and_generate_code(bean)
+    except IndexError as e:
+        print(e)
+        QMessageBox().information(msg_box_ui, "警告", "发生错误", QMessageBox.Ok)
+        return
     if res != '':
         ui.te_json.setText(res)
 
@@ -191,6 +195,15 @@ def init_event():
     # 绑定json解析按钮事件
     ui.btn_format.clicked.connect(json_format)
     ui.btn_generate.clicked.connect(generate_bean)
+    ui.btn_copy.clicked.connect(copy_left_text)
+
+
+def copy_left_text():
+    ## 第三方库 用于解决跨平台的复制粘贴和复制的文本带bom问题
+    import pyperclip
+    text = ui.te_json.toPlainText()
+    pyperclip.copy(text)
+    pass
 
 
 # 设置表格基础样式
