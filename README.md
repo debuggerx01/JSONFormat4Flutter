@@ -53,7 +53,7 @@ ModuleNotFoundError: No module named 'PyQt5'
 
 ## 已知问题
 + mac下从文本框复制出的文字直接粘贴到 idea/android studio 中报错 " lllegal character '65279' "
-```
+
 参考 [issue1](https://github.com/debuggerx01/JSONFormat4Flutter/issues/1) ，如下图，使用5.7.1及之前版本的pyqt5
-```
+
 ![](https://github.com/debuggerx01/JSONFormat4Flutter/blob/master/Example/pyqt571.png?raw=true)
