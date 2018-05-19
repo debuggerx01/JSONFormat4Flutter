@@ -8,6 +8,9 @@ from functools import partial
 from mainwindow import *
 from tools import *
 
+# 第三方库 用于解决跨平台的复制粘贴和复制的文本带bom问题
+import pyperclip
+
 # 定义显示的json格式化字符串的缩进量为4个空格
 indent = '    '
 
@@ -199,8 +202,6 @@ def init_event():
 
 
 def copy_left_text():
-    ## 第三方库 用于解决跨平台的复制粘贴和复制的文本带bom问题
-    import pyperclip
     text = ui.te_json.toPlainText()
     pyperclip.copy(text)
     pass

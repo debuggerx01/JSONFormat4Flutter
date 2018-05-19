@@ -7,12 +7,12 @@
 import json
 from PyQt5.QtWidgets import QLabel, QComboBox, QMessageBox
 
-# 验证json字符串是否合法
 from template_code import get_top_code_dict, get_list_code_loop
 
 msg_box_ui = None
 
 
+# 验证json字符串是否合法
 def is_json(myjson):
     try:
         json.loads(myjson)
