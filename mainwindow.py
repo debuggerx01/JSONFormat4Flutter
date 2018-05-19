@@ -2,16 +2,17 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(927, 724)
+        MainWindow.resize(927, 716)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -49,6 +50,9 @@ class Ui_MainWindow(object):
         self.te_json = QtWidgets.QTextEdit(self.layoutWidget)
         self.te_json.setObjectName("te_json")
         self.verticalLayout_3.addWidget(self.te_json)
+        self.btn_copy = QtWidgets.QPushButton(self.layoutWidget)
+        self.btn_copy.setObjectName("btn_copy")
+        self.verticalLayout_3.addWidget(self.btn_copy)
         self.layoutWidget1 = QtWidgets.QWidget(self.splitter)
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.layoutWidget1)
@@ -74,6 +78,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "JSONFormat4Flutter"))
         self.btn_format.setText(_translate("MainWindow", "格式化"))
+        self.btn_copy.setText(_translate("MainWindow", "复制"))
         self.btn_generate.setText(_translate("MainWindow", "生成Bean"))
 
 
@@ -86,4 +91,3 @@ if __name__ == "__main__":
     ui.setupUi(widget)
     widget.show()
     sys.exit(app.exec_())
-

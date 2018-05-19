@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>927</width>
-    <height>724</height>
+    <height>716</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -61,6 +61,13 @@
            </item>
            <item>
             <widget class="QTextEdit" name="te_json"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_copy">
+             <property name="text">
+              <string>复制</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
