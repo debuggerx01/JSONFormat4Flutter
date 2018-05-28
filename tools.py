@@ -15,10 +15,12 @@ msg_box_ui = None
 # 验证json字符串是否合法
 def is_json(myjson):
     try:
-        json.loads(myjson)
+        j = json.loads(myjson)
     except ValueError:
         return False
-    return True
+    if type(j) in (list, dict):
+        return True
+    return False
 
 
 # 传入未格式化的单行json字符串，返回指定缩进的多行json字符串
@@ -75,7 +77,10 @@ def build_list_construction(f, t, n):
         code = list_code_loop(code, i, total, n, class_type)
 
     # 嵌套模板的后续处理
-    code = code.replace('%s%s' % (n, 'Child' * total), 'new %s(%s%s)' % (class_type, n, ('Item' * total)))
+    if check_level_type(class_type) not in (1, 2) and class_type != '':
+        code = code.replace('%s%s' % (n, 'Child' * total), 'new %s(%s%s)' % (class_type, n, ('Item' * total)))
+    else:
+        code = code.replace('%s' % ('Child' * total), '%s' % ('Item' * total))
     code = code[code.find(';') + 1:]
     code = code.replace('%s){' % n, 'jsonRes[\'%s\']){' % n).replace('${loop}', '')
 
@@ -140,10 +145,10 @@ def build_level_code(level_bean):
                     child_bean.append(level_bean.pop(0))
                 build_level_code(child_bean)
             # 数据类型为数组时
-            if check_level_type(t) == 3:
+            if check_level_type(t) == 3 and len(level_bean) > 0:
                 generic_type = level_bean[0][2].replace('List<', '').replace('>', '')
                 # 如果List的里层数据为dict则对其去壳后处理
-                if check_level_type(generic_type) == 4:
+                if check_level_type(generic_type) == 4 and generic_type != '':
                     while check_level_type(level_bean[0][2]) == 3:
                         work_level = level_bean[0][0]
                         level_bean.pop(0)
@@ -183,6 +188,8 @@ def generate_code(work_bean):
     if is_list_top:
         res = res.replace('jsonRes[\'list\']', 'jsonRes', 1)
 
+    # 如果json中存在空list这种操蛋情况，将list类型从list<>修改成list<dynamic>
+    res = res.replace('List<>', 'List<dynamic>')
     # 最终修改，添加jsonStr解析为jsonRes代码
     bp = res.find('(jsonRes) {')
     return 'import \'dart:convert\' show json;\n' + res[:bp] + '(jsonStr) {\n  var jsonRes = json.decode(jsonStr);\n' + res[bp + 11:]

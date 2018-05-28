@@ -133,18 +133,25 @@ def update_list(json_str):
 
     ui.tv_fields.setRowCount(len(res))
 
+    pre_type_combobox = None
+    ii = 0
     for i in range(len(res)):
         line = res[i]
         assert isinstance(line, str)
         index = line.find('<')
-
-        ui.tv_fields.setCellWidget(i, 1, get_type_combobox(line))
+        temp_type_combobox = get_type_combobox(line)
+        ui.tv_fields.setCellWidget(ii, 1, temp_type_combobox)
+        if temp_type_combobox.count() > 1 and pre_type_combobox is not None and pre_type_combobox.currentText().startswith('List'):
+            ui.tv_fields.setRowCount(ui.tv_fields.rowCount() - 1)
+            pre_type_combobox = temp_type_combobox
+            continue
+        pre_type_combobox = temp_type_combobox
         if line.strip() == '<[dict]>8':
             label = QtWidgets.QLabel("")
             label.setStyleSheet("background-color: rgb(200,200,200);")
-            ui.tv_fields.setCellWidget(i, 2, label)
+            ui.tv_fields.setCellWidget(ii, 2, label)
         else:
-            ui.tv_fields.setCellWidget(i, 2, get_name_text_edit(line))
+            ui.tv_fields.setCellWidget(ii, 2, get_name_text_edit(line))
 
         if index == 0:
             field = line.replace('<', '').replace('>', '')
@@ -155,7 +162,8 @@ def update_list(json_str):
         label.setText(field[0:60] + '...' if len(field) > 60 else field[0:-1])
         label.setToolTip(field[0:-1])
 
-        ui.tv_fields.setCellWidget(i, 0, label)
+        ui.tv_fields.setCellWidget(ii, 0, label)
+        ii += 1
 
     ui.tv_fields.resizeColumnToContents(0)
 
@@ -184,6 +192,7 @@ def generate_bean():
 
         bean.append([var_field, var_type, var_name])
 
+    check_and_generate_code(bean)
     try:
         res = check_and_generate_code(bean)
     except IndexError as e:
