@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>JSONFormat4Flutter</string>
+   <string>JSONFormat4Flutter(v0.4)</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">

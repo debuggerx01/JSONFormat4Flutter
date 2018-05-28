@@ -2,12 +2,11 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -76,7 +75,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "JSONFormat4Flutter"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "JSONFormat4Flutter(v0.4)"))
         self.btn_format.setText(_translate("MainWindow", "格式化"))
         self.btn_copy.setText(_translate("MainWindow", "复制"))
         self.btn_generate.setText(_translate("MainWindow", "生成Bean"))
@@ -91,3 +90,4 @@ if __name__ == "__main__":
     ui.setupUi(widget)
     widget.show()
     sys.exit(app.exec_())
+
