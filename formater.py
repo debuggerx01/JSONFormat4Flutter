@@ -192,7 +192,6 @@ def generate_bean():
 
         bean.append([var_field, var_type, var_name])
 
-    check_and_generate_code(bean)
     try:
         res = check_and_generate_code(bean)
     except IndexError as e:
