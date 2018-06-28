@@ -11,7 +11,11 @@ class ${type} {
 
 ${properties}
   
-  ${type}(jsonRes) {
+  ${type}() {
+${defaul_construction}
+  }
+
+  ${type}.fromJson(jsonRes) {
 ${construction}
   }
 

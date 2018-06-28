@@ -78,7 +78,7 @@ def build_list_construction(f, t, n):
 
     # 嵌套模板的后续处理
     if check_level_type(class_type) not in (1, 2) and class_type != '':
-        code = code.replace('%s%s' % (n, 'Child' * total), 'new %s(%s%s)' % (class_type, n, ('Item' * total)))
+        code = code.replace('%s%s' % (n, 'Child' * total), 'new %s.fromJson(%s%s)' % (class_type, n, ('Item' * total)))
     else:
         code = code.replace('%s' % ('Child' * total), '%s' % ('Item' * total))
     code = code[code.find(';') + 1:]
@@ -92,11 +92,15 @@ def add_param_to_code(code, param):
 
     # 先按照基本数据类型方式处理
     properties = '  %s %s;\n' % (t, n)
+    default_construction = 'defaul_construction\n'
     construction = '    %s = jsonRes[\'%s\'];\n' % (n, f)
     toString = '"%s": $%s,' % (f, n)
 
     pp = code.find('${properties}')
     code = code[:pp] + properties + code[pp:]
+
+    pd = code.find('${defaul_construction}')
+    code = code[:pd] + default_construction + code[pd:]
 
     pc = code.find('${construction}')
     code = code[:pc] + construction + code[pc:]
@@ -108,17 +112,24 @@ def add_param_to_code(code, param):
 
     tcode = check_level_type(t)
 
+    # 普通类型处理，只需移除defaul_construction
+    if tcode == 1:
+        code = code.replace('defaul_construction\n', '')
+
+    # 字符串类型处理,需要修改toString中的输出方式和移除defaul_construction
     if tcode == 2:
+        code = code.replace('defaul_construction\n', '')
         code = code.replace(': $%s' % n, ': ${%s != null?\'${json.encode(%s)}\':\'null\'}' % (n, n))
 
-    # dict类型处理，只需要修改construction中的输出方式
+    # dict类型处理，需要修改json_construction中的输出方式和defaul_construction的输出方式
     elif tcode == 4:
-        code = code.replace('jsonRes[\'%s\']' % f, 'new %s(jsonRes[\'%s\'])' % (t, f))
+        code = code.replace('defaul_construction\n', '    %s = new %s();\n' % (n, t))
+        code = code.replace('jsonRes[\'%s\']' % f, 'new %s.fromJson(jsonRes[\'%s\'])' % (t, f))
 
-    # list类型处理，只需要修改construction中的输出方式
+    # list类型处理，需要修改json_construction中的输出方式和defaul_construction的输出方式
     elif tcode == 3:
         list_loop = build_list_construction(f, t, n)
-
+        code = code.replace('defaul_construction\n', '    %s = [];\n' % (n))
         code = code.replace('jsonRes[\'%s\'];' % f, list_loop)
 
     return code
@@ -160,7 +171,7 @@ def build_level_code(level_bean):
 
             # 不管如何，到这里的数据都是目前dict的一级子数据，作为参数传入模板中
             code = add_param_to_code(code, (f, t, n))
-        codes.append(code.replace(',${toString}', '').replace('${construction}', '').replace('${properties}', ''))
+        codes.append(code.replace(',${toString}', '').replace('${construction}', '').replace('${defaul_construction}', '').replace('${properties}', ''))
 
 
 def generate_code(work_bean):
