@@ -171,7 +171,7 @@ def update_list(json_str):
 def json_format():
     # 从文本编辑框获取json字符串
     json_str = ui.te_json.toPlainText()
-    if is_json(json_str):
+    if is_json(json_str.strip()):
         # 将格式化后的json字符串覆盖到文本编辑框中
         ui.te_json.setText(jformat(json_str.replace('\n', '')))
 
@@ -236,6 +236,22 @@ def init_view():
 def custom_ui():
     init_view()
     init_event()
+#
+#     json_str = '''
+# {
+#   "x": {
+#     "e": [
+#       {}
+#     ],
+#     "q": [],
+#     "t": []
+#   }
+# }
+#
+#     '''
+#
+#     ui.te_json.setText(json_str)
+#     ui.btn_format.click()
 
 
 if __name__ == "__main__":

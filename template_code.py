@@ -10,11 +10,9 @@ template_dict = r"""
 class ${type} {
 
 ${properties}
-  
-  ${type}() {
-${defaul_construction}
-  }
 
+  ${type}.fromParams({${this.properties}});
+  
   ${type}.fromJson(jsonRes) {
 ${construction}
   }
@@ -28,11 +26,11 @@ ${construction}
 """
 
 template_list = r"""   
-${list_count}${class_type}${>count} ${name}${current_child} = [];
-for (var ${name}${current_items} in ${name}${parent_items}){
-    ${loop}
-    ${name}${current_child}.add(${name}${child_child});
-}
+  ${list_count}${class_type}${>count} ${name}${current_child} = [];
+    for (var ${name}${current_items} in ${name}${parent_items}){
+      ${loop}
+      ${name}${current_child}.add(${name}${child_child});
+    }
 """
 
 

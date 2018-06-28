@@ -8,15 +8,12 @@ class RegionResp {
   String message;
   Data data;
 
-  
-  RegionResp() {
-    data = new Data();
 
-  }
+  RegionResp.fromParams({this.code, this.ttl, this.message, this.data});
 
-  RegionResp.fromJson(jsonStr) {
-  var jsonRes = json.decode(jsonStr);
+  factory RegionResp(jsonStr) => RegionResp.fromJson(json.decode(jsonStr));
 
+  RegionResp.fromJson(jsonRes) {
     code = jsonRes['code'];
     ttl = jsonRes['ttl'];
     message = jsonRes['message'];
@@ -37,20 +34,16 @@ class Data {
   List<Arch> archives;
   Page page;
 
-  
-  Data() {
-    archives = [];
-    page = new Page();
 
-  }
+  Data.fromParams({this.archives, this.page});
 
   Data.fromJson(jsonRes) {
     archives = [];
 
-for (var archivesItem in jsonRes['archives']){
-    
-    archives.add(new Arch.fromJson(archivesItem));
-}
+    for (var archivesItem in jsonRes['archives']){
+
+      archives.add(new Arch.fromJson(archivesItem));
+    }
 
     page = new Page.fromJson(jsonRes['page']);
 
@@ -70,10 +63,8 @@ class Page {
   int num;
   int size;
 
-  
-  Page() {
 
-  }
+  Page.fromParams({this.count, this.num, this.size});
 
   Page.fromJson(jsonRes) {
     count = jsonRes['count'];
@@ -110,13 +101,8 @@ class Arch {
   Rights rights;
   Stat stat;
 
-  
-  Arch() {
-    owner = new Owner();
-    rights = new Rights();
-    stat = new Stat();
 
-  }
+  Arch.fromParams({this.aid, this.attribute, this.copyright, this.ctime, this.duration, this.pubdate, this.state, this.tid, this.videos, this.desc, this.dynamic, this.pic, this.title, this.tname, this.owner, this.rights, this.stat});
 
   Arch.fromJson(jsonRes) {
     aid = jsonRes['aid'];
@@ -160,10 +146,8 @@ class Stat {
   int share;
   int view;
 
-  
-  Stat() {
 
-  }
+  Stat.fromParams({this.aid, this.coin, this.danmaku, this.favorite, this.his_rank, this.like, this.now_rank, this.reply, this.share, this.view});
 
   Stat.fromJson(jsonRes) {
     aid = jsonRes['aid'];
@@ -197,10 +181,8 @@ class Rights {
   int no_reprint;
   int pay;
 
-  
-  Rights() {
 
-  }
+  Rights.fromParams({this.bp, this.download, this.elec, this.hd5, this.movie, this.no_reprint, this.pay});
 
   Rights.fromJson(jsonRes) {
     bp = jsonRes['bp'];
@@ -227,10 +209,8 @@ class Owner {
   String face;
   String name;
 
-  
-  Owner() {
 
-  }
+  Owner.fromParams({this.mid, this.face, this.name});
 
   Owner.fromJson(jsonRes) {
     mid = jsonRes['mid'];
@@ -244,5 +224,4 @@ class Owner {
     return '{"mid": $mid,"face": ${face != null?'${json.encode(face)}':'null'},"name": ${name != null?'${json.encode(name)}':'null'}}';
   }
 }
-
 
