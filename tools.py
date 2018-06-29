@@ -222,7 +222,7 @@ def generate_code(work_bean):
         out_res += (line + '\n')
         if first and r'.fromParams({this.' in line:
             class_name = line.split(r'.fromParams({this.')[0].strip()
-            out_res += '\n  factory %s(jsonStr) => jsonStr.runtimeType == String ? %s.fromJson(json.decode(jsonStr)) : %s.fromJson(jsonStr);\n' \
+            out_res += '\n  factory %s(jsonStr) => jsonStr is String ? %s.fromJson(json.decode(jsonStr)) : %s.fromJson(jsonStr);\n' \
                        % (class_name, class_name, class_name)
             first = False
     return out_res
