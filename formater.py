@@ -87,7 +87,7 @@ def change_background_color(com_box, current_text):
 
 
 # 生成字段类型下拉框
-def get_type_combobox(line):
+def get_type_combobox(need_connect, line):
     com_box = QtWidgets.QComboBox()
     com_box.setEditable(True)
     obj_type = int(line[-1]) if line[-1].isdigit() else 0
@@ -95,7 +95,7 @@ def get_type_combobox(line):
 
     com_box.currentTextChanged.connect(partial(change_background_color, com_box))
 
-    if last_list_com_box is not None:
+    if need_connect and last_list_com_box is not None:
         com_box.currentTextChanged.connect(partial(change_text, last_list_com_box))
     last_list_com_box = None
 
@@ -134,12 +134,14 @@ def update_list(json_str):
     ui.tv_fields.setRowCount(len(res))
 
     pre_type_combobox = None
+    pre_index = -1
     ii = 0
     for i in range(len(res)):
         line = res[i]
         assert isinstance(line, str)
         index = line.find('<')
-        temp_type_combobox = get_type_combobox(line)
+        temp_type_combobox = get_type_combobox(index != pre_index, line)
+        pre_index = index
         ui.tv_fields.setCellWidget(ii, 1, temp_type_combobox)
         if temp_type_combobox.count() > 1 and pre_type_combobox is not None and pre_type_combobox.currentText().startswith('List'):
             ui.tv_fields.setRowCount(ui.tv_fields.rowCount() - 1)
@@ -175,8 +177,9 @@ def json_format():
         # 将格式化后的json字符串覆盖到文本编辑框中
         ui.te_json.setText(jformat(json_str.replace('\n', '')))
 
+        # 为了修复json中含有内容为空的对象，也就是有'{}'这种玩意时解析失败的问题，先预处理把'{}'全部替换成null
         # 根据json更新表格条目
-        update_list(json_str)
+        update_list(json_str.replace('{}', 'null'))
 
     else:
         msg = QtWidgets.QMessageBox()
@@ -236,22 +239,6 @@ def init_view():
 def custom_ui():
     init_view()
     init_event()
-#
-#     json_str = '''
-# {
-#   "x": {
-#     "e": [
-#       {}
-#     ],
-#     "q": [],
-#     "t": []
-#   }
-# }
-#
-#     '''
-#
-#     ui.te_json.setText(json_str)
-#     ui.btn_format.click()
 
 
 if __name__ == "__main__":

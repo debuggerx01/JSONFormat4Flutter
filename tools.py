@@ -198,11 +198,28 @@ def generate_code(work_bean):
     # 移除参数构造函数用模板生成后多余的逗号和空格
     res = res.replace(', });', '});')
 
+    # 移除没有必要的list取值循环，这次循环只是修改list声明代码，并将不需要的行加上注释
+    # 下面一次的循环则忽略这些注释的行达到删除的效果
+    lines = res.splitlines()
+    for index in range(len(lines)):
+        if r'.add(' in lines[index]:
+            sp = lines[index].find(r'.add(')
+            ep = lines[index].rfind(r')')
+            if r'(' not in lines[index][sp + 5:ep]:
+                sp = lines[index - 2].find('in ')
+                ep = lines[index - 2].rfind(')')
+                list_src = lines[index - 2][sp + 3:ep]
+                lines[index - 4] = lines[index - 4].replace('[]', list_src)
+                for i in range(6):
+                    lines[index - 3 + i] = '//%s' % lines[index - 3 + i]
+
     # 最终修改，添加json库导包代码，并为顶层对象增加默认构造
     out_res = 'import \'dart:convert\' show json;\n'
     first = True
-    for line in res.splitlines():
-        out_res += (line+'\n')
+    for line in lines:
+        if line.startswith('//'):
+            continue
+        out_res += (line + '\n')
         if first and r'.fromParams({this.' in line:
             class_name = line.split(r'.fromParams({this.')[0].strip()
             out_res += '\n  factory %s(jsonStr) => %s.fromJson(json.decode(jsonStr));\n' % (class_name, class_name)
