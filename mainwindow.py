@@ -19,6 +19,9 @@ class Ui_MainWindow(object):
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QtCore.QSize(800, 600))
         MainWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/img/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralWidget)
@@ -80,6 +83,7 @@ class Ui_MainWindow(object):
         self.btn_copy.setText(_translate("MainWindow", "复制"))
         self.btn_generate.setText(_translate("MainWindow", "生成Bean"))
 
+import logo_rc
 
 if __name__ == "__main__":
     import sys

@@ -29,7 +29,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>JSONFormat4Flutter(v0.4)</string>
+   <string>JSONFormat4Flutter(v0.5)</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="logo.qrc">
+    <normaloff>:/img/logo.png</normaloff>:/img/logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -101,6 +105,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="logo.qrc"/>
+ </resources>
  <connections/>
 </ui>
