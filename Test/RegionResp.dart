@@ -11,14 +11,13 @@ class RegionResp {
 
   RegionResp.fromParams({this.code, this.ttl, this.message, this.data});
 
-  factory RegionResp(jsonStr) => RegionResp.fromJson(json.decode(jsonStr));
+  factory RegionResp(jsonStr) => jsonStr is String ? RegionResp.fromJson(json.decode(jsonStr)) : RegionResp.fromJson(jsonStr);
 
   RegionResp.fromJson(jsonRes) {
     code = jsonRes['code'];
     ttl = jsonRes['ttl'];
     message = jsonRes['message'];
     data = new Data.fromJson(jsonRes['data']);
-
   }
 
   @override
