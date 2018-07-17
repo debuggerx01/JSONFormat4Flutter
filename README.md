@@ -3,7 +3,7 @@
 
 ## 使用演示操作：
 
-![](https://user-gold-cdn.xitu.io/2018/7/17/164a8c2494ad8adf?w=1280&h=720&f=gif&s=8260931)
+![](https://github.com/debuggerx01/JSONFormat4Flutter/blob/master/Example/json.gif?raw=true)
 
 
 ## 使用说明
