@@ -3,11 +3,11 @@
 
 ## 使用演示操作：
 
-![](https://github.com/debuggerx01/JSONFormat4Flutter/blob/master/Example/json.gif?raw=true)
+![](https://user-gold-cdn.xitu.io/2018/7/17/164a8c2494ad8adf?w=1280&h=720&f=gif&s=8260931)
 
 
 ## 使用说明
-#### 1.界面操作
+#### 1.界面操作 (参考录屏：[parse.gif](https://github.com/debuggerx01/JSONFormat4Flutter/blob/master/Example/parse.gif))
 1. 工具运行以后，先将复制好的json字符串粘贴到左侧文本框，然后点击'格式化'按钮；如果提示出错请检查json是否合法
 2. 格式化成功后左侧json将会按照缩进格式化显示，并且右侧表格将显示分析得出的json结构，'Fields'列显示层级和原始分析数据，'Name'列显示每个字段的名称，'Type'列用于设定字段的数据类型
     1. 对于普通数据类型(int、 double、 boolean、 String)，Types列的类型将会自动给出，请尽量避免在上面滚动鼠标滚轮导致类型选择改变
@@ -25,24 +25,23 @@
 3. 确认设置无误后，点击'生成Bean'按钮，左侧json显示栏的内容将被替换为生成的代码，可以使用鼠标键盘全选复制，或者直接点击下方的'复制'按钮，然后将代码粘贴到IDE中，完成解析流程
 
 
-#### 2.生成代码说明
+#### 2.生成代码说明  (参考录屏：[use.gif](https://github.com/debuggerx01/JSONFormat4Flutter/blob/master/Example/use.gif))
 
 1. 反序列化(json字符串->对象)
-将生成的代码粘贴到dart源文件中后，即可以在任意地方导包使用，一般方法为(以http.get请求为例):
-```java
-var response = await HTTP.get(url);
-var resp = BeanResp(response.body);
-```
-
-也就是说，将请求到的json内容作为参数传递给BeanResp的默认构造函数，这样生成的resp对象即是请求到内容的实体。
-需要说明的是，默认构造既可以传入json的原始字符串，也可以传入已经用原生json.decode()方法解析过的json对象(这主要是为了照顾使用dio库进行数据请求时结果数据会被自动解析成json对象的情况)。
-只有顶级对象拥有默认构造方法，而其他子层级对象将使用xxx.fromJson()的命名构造进行对象创建。
+<br>将生成的代码粘贴到dart源文件中后，即可以在任意地方导包使用，一般方法为(以http.get请求为例):
+    ```java
+    var response = await HTTP.get(url);
+    var resp = BeanResp(response.body);
+    ```
+    也就是说，将请求到的json内容作为参数传递给BeanResp的默认构造函数，这样生成的resp对象即是请求到内容的实体。
+    需要说明的是，默认构造既可以传入json的原始字符串，也可以传入已经用原生json.decode()方法解析过的json对象(这主要是为了照顾使用dio库进行数据请求时结果数据会被自动解析成json对象的情况)。
+    只有顶级对象拥有默认构造方法，而其他子层级对象将使用xxx.fromJson()的命名构造进行对象创建。
 
 2. 序列化(对象->json字符串)
-与官方样例的处理方式不同，直接调用对象的toString()方法即可得到json字符串完成序列化操作
+<br>与官方样例的处理方式不同，直接调用对象的toString()方法即可得到json字符串完成序列化操作
 
 3. 手动创建对象
-为了方便大部分使用场景下的便利性，bean的默认构造函数被用来实现反序列化，所以如果想要在代码中手动传参创建bean对象，可以使用xxx.fromParams()命名构造来完成。
+<br>为了方便大部分使用场景下的便利性，bean的默认构造函数被用来实现反序列化，所以如果想要在代码中手动传参创建bean对象，可以使用xxx.fromParams()命名构造来完成。
 
 ## 简易运行方式：
 在 [Release](https://github.com/debuggerx01/JSONFormat4Flutter/releases) 页面中，选择下载对应平台最新的二进制文件后——
@@ -94,4 +93,4 @@ ModuleNotFoundError: No module named 'PyQt5'
 
 参考 [issue1](https://github.com/debuggerx01/JSONFormat4Flutter/issues/1) ，如下图，使用5.7.1及之前版本的pyqt5
 
-![](https://github.com/debuggerx01/JSONFormat4Flutter/blob/master/Example/pyqt571.png?raw=true)
+![](https://user-gold-cdn.xitu.io/2018/7/17/164a8c24460f41ee?w=1270&h=861&f=png&s=174844)
