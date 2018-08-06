@@ -1,6 +1,8 @@
 # JSONFormat4Flutter
 受zzz40500/GsonFormat启发，将JSONObject格式的String解析成dart语言的实体类
 
+## 详细介绍说明(掘金)：[在Flutter开发过程中快速生成json解析模板类的工具](https://juejin.im/post/5b4e04bbe51d45198c018e6e)
+
 ## 使用演示操作：
 
 ![](https://github.com/debuggerx01/JSONFormat4Flutter/blob/master/Example/json.gif?raw=true)
