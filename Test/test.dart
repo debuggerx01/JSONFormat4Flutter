@@ -5,6 +5,7 @@ import 'package:test/test.dart';
 import 'EmptyResp.dart';
 import 'RegionResp.dart';
 import 'WanResp.dart';
+import 'ListsResp.dart';
 
 void main() {
   test('Test Region', () {
@@ -153,6 +154,24 @@ void main() {
     /// 检查bean对象toString还原成json字符串后再交给json解析的结果是否与原始字符串相同
     expect(jsonRes, json.decode(resp.toString()));
   });
+
+
+  test('test fucking lists', () {
+
+    String str = readFromFile('Lists');
+    ListsResp resp = new ListsResp(str);
+    var jsonRes = json.decode(str);
+
+    /// 逐个字段检查是否与json.decode()的结果相同
+    expect(resp.asd[0][0][0], jsonRes['asd'][0][0][0]);
+    expect(resp.qwe[0][0][0].zxc, jsonRes['qwe'][0][0][0]['zxc']);
+    expect(resp.qaz, jsonRes['qaz']);
+
+    /// 检查bean对象toString还原成json字符串后再交给json解析的结果是否与原始字符串相同
+    expect(jsonRes, json.decode(resp.toString()));
+});
+
+
 }
 
 String readFromFile(String name) {

@@ -60,11 +60,11 @@ def list_code_loop(code, count, total, n, ct):
     if code == '':
         return fragment
     else:
-        return code.replace('${loop}', fragment)
+        return code.replace('){\n', '){').replace('${loop}\n', fragment)
 
 
 # 向代码模板中插入变量
-def build_list_construction(f, t, n):
+def build_list_construction(t, n):
     class_type = t.replace('List<', '').replace('>', '')
 
     list_loop = '[];\n'
@@ -82,7 +82,7 @@ def build_list_construction(f, t, n):
     else:
         code = code.replace('%s' % ('Child' * total), '%s' % ('Item' * total))
     code = code[code.find(';') + 1:]
-    code = code.replace('%s){' % n, 'jsonRes[\'%s\']){' % n).replace('${loop}', '')
+    code = code.replace('%s){' % n, 'jsonRes[\'%s\']){' % n).replace('${loop}\n', '')
 
     return list_loop + code
 
@@ -94,7 +94,7 @@ def add_param_to_code(code, param):
     properties = '  %s %s;\n' % (t, n)
     this_properties = 'this.%s, ' % n
     construction = '    %s = jsonRes[\'%s\'];\n' % (n, f)
-    toString = '"%s": $%s,' % (f, n)
+    to_string = '"%s": $%s,' % (f, n)
 
     pp = code.find('${properties}')
     code = code[:pp] + properties + code[pp:]
@@ -106,22 +106,22 @@ def add_param_to_code(code, param):
     code = code[:pc] + construction + code[pc:]
 
     ps = code.find('${toString}')
-    code = code[:ps] + toString + code[ps:]
+    code = code[:ps] + to_string + code[ps:]
 
     # 字符串类型处理,只需要修改toString中的输出方式
 
-    tcode = check_level_type(t)
+    t_code = check_level_type(t)
 
-    if tcode == 2:
+    if t_code == 2:
         code = code.replace(': $%s' % n, ': ${%s != null?\'${json.encode(%s)}\':\'null\'}' % (n, n))
 
     # dict类型处理，只需要修改construction中的输出方式
-    elif tcode == 4:
+    elif t_code == 4:
         code = code.replace('jsonRes[\'%s\']' % f, 'new %s.fromJson(jsonRes[\'%s\'])' % (t, f))
 
     # list类型处理，只需要修改construction中的输出方式
-    elif tcode == 3:
-        list_loop = build_list_construction(f, t, n)
+    elif t_code == 3:
+        list_loop = build_list_construction(t, n)
 
         code = code.replace('jsonRes[\'%s\'];' % f, list_loop)
 
@@ -141,6 +141,8 @@ def build_level_code(level_bean):
         work_level = level_bean[0][0]
         while len(level_bean) > 0:
             (l, f, t, n) = level_bean.pop(0)
+            if n == '[list]':
+                continue
             # 数据类型为字典时
             if check_level_type(t) == 4:
                 # 先把该字典的定义作为顶层存到递归调用的bean顶部
@@ -150,7 +152,7 @@ def build_level_code(level_bean):
                 build_level_code(child_bean)
             # 数据类型为数组时
             if check_level_type(t) == 3 and len(level_bean) > 0:
-                generic_type = level_bean[0][2].replace('List<', '').replace('>', '')
+                generic_type = t.replace('List<', '').replace('>', '')
                 # 如果List的里层数据为dict则对其去壳后处理
                 if check_level_type(generic_type) == 4 and generic_type != '':
                     while check_level_type(level_bean[0][2]) == 3:
@@ -198,20 +200,46 @@ def generate_code(work_bean):
     # 移除参数构造函数用模板生成后多余的逗号和空格
     res = res.replace(', });', '});')
 
-    # 移除没有必要的list取值循环，这次循环只是修改list声明代码，并将不需要的行加上注释
-    # 下面一次的循环则忽略这些注释的行达到删除的效果
+    # 利用利用大括号匹配移除无用行的计数器
+    remove_counter = 0
+    need_clean = False
+
+    # 移除没有必要的list取值循环
     lines = res.splitlines()
     for index in range(len(lines)):
-        if r'.add(' in lines[index]:
-            sp = lines[index].find(r'.add(')
-            ep = lines[index].rfind(r')')
-            if r'(' not in lines[index][sp + 5:ep]:
-                sp = lines[index - 2].find('in ')
-                ep = lines[index - 2].rfind(')')
-                list_src = lines[index - 2][sp + 3:ep]
-                lines[index - 4] = lines[index - 4].replace('[]', list_src)
-                for i in range(6):
-                    lines[index - 3 + i] = '//%s' % lines[index - 3 + i]
+        if r' = [];' in lines[index] and r'List<' not in lines[index]:
+            field_name = lines[index].strip()
+            field_name = field_name[:field_name.find(' ')]
+            need_clean = False
+            for revert_index in range(index - 1, 0, -1):
+                if r'> %s;' % field_name in lines[revert_index]:
+                    field_type = lines[revert_index]
+                    field_type = field_type[field_type.find('<') + 1:field_type.rfind('>')]
+                    if check_level_type(field_type) in (1, 2):
+                        # List的类型或嵌套类型为基本数据类型
+                        need_clean = True
+                    break
+            if need_clean:
+                # 利用大括号匹配移除无用行
+                sp = lines[index + 2].find('in ')
+                ep = lines[index + 2].rfind(')')
+                list_src = lines[index + 2][sp + 3:ep] + '.cast<%s>()' % field_type
+                lines[index] = lines[index].replace('[]', list_src)
+                continue
+
+        if need_clean:
+            lines[index] = '//%s' % lines[index]
+            if lines[index].strip() == '//':
+                continue
+            if lines[index].strip().endswith('{'):
+                remove_counter += 1
+            if lines[index].strip().endswith('}'):
+                remove_counter -= 1
+            if remove_counter == 0:
+                need_clean = False
+
+        if lines[index].strip() == '' and index < len(lines) - 1 and lines[index + 1].strip() in ('', '}'):
+            lines[index] = '//%s' % lines[index]
 
     # 最终修改，添加json库导包代码，并为顶层对象增加默认构造
     out_res = 'import \'dart:convert\' show json;\n'

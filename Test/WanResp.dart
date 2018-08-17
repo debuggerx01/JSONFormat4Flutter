@@ -1,12 +1,10 @@
 import 'dart:convert' show json;
 
-
 class WanResp {
 
   int errorCode;
   String errorMsg;
   List<Data> data;
-
 
   WanResp.fromParams({this.errorCode, this.errorMsg, this.data});
 
@@ -18,11 +16,8 @@ class WanResp {
     data = [];
 
     for (var dataItem in jsonRes['data']){
-
-      data.add(new Data.fromJson(dataItem));
+            data.add(new Data.fromJson(dataItem));
     }
-
-
   }
 
   @override
@@ -30,8 +25,6 @@ class WanResp {
     return '{"errorCode": $errorCode,"errorMsg": ${errorMsg != null?'${json.encode(errorMsg)}':'null'},"data": $data}';
   }
 }
-
-
 
 class Data {
 
@@ -42,7 +35,6 @@ class Data {
   int visible;
   String name;
   List<Children> children;
-
 
   Data.fromParams({this.courseId, this.id, this.order, this.parentChapterId, this.visible, this.name, this.children});
 
@@ -56,11 +48,8 @@ class Data {
     children = [];
 
     for (var childrenItem in jsonRes['children']){
-
-      children.add(new Children.fromJson(childrenItem));
+            children.add(new Children.fromJson(childrenItem));
     }
-
-
   }
 
   @override
@@ -68,8 +57,6 @@ class Data {
     return '{"courseId": $courseId,"id": $id,"order": $order,"parentChapterId": $parentChapterId,"visible": $visible,"name": ${name != null?'${json.encode(name)}':'null'},"children": $children}';
   }
 }
-
-
 
 class Children {
 
@@ -81,7 +68,6 @@ class Children {
   String name;
   List<dynamic> children;
 
-
   Children.fromParams({this.courseId, this.id, this.order, this.parentChapterId, this.visible, this.name, this.children});
 
   Children.fromJson(jsonRes) {
@@ -91,8 +77,11 @@ class Children {
     parentChapterId = jsonRes['parentChapterId'];
     visible = jsonRes['visible'];
     name = jsonRes['name'];
-    children = jsonRes['children'];
+    children = [];
 
+    for (var childrenItem in jsonRes['children']){
+            children.add(childrenItem);
+    }
   }
 
   @override

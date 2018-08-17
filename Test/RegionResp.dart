@@ -1,13 +1,11 @@
 import 'dart:convert' show json;
 
-
 class RegionResp {
 
   int code;
   int ttl;
   String message;
   Data data;
-
 
   RegionResp.fromParams({this.code, this.ttl, this.message, this.data});
 
@@ -26,13 +24,10 @@ class RegionResp {
   }
 }
 
-
-
 class Data {
 
   List<Arch> archives;
   Page page;
-
 
   Data.fromParams({this.archives, this.page});
 
@@ -40,12 +35,10 @@ class Data {
     archives = [];
 
     for (var archivesItem in jsonRes['archives']){
-
-      archives.add(new Arch.fromJson(archivesItem));
+            archives.add(new Arch.fromJson(archivesItem));
     }
 
     page = new Page.fromJson(jsonRes['page']);
-
   }
 
   @override
@@ -54,14 +47,11 @@ class Data {
   }
 }
 
-
-
 class Page {
 
   int count;
   int num;
   int size;
-
 
   Page.fromParams({this.count, this.num, this.size});
 
@@ -69,7 +59,6 @@ class Page {
     count = jsonRes['count'];
     num = jsonRes['num'];
     size = jsonRes['size'];
-
   }
 
   @override
@@ -77,8 +66,6 @@ class Page {
     return '{"count": $count,"num": $num,"size": $size}';
   }
 }
-
-
 
 class Arch {
 
@@ -100,7 +87,6 @@ class Arch {
   Rights rights;
   Stat stat;
 
-
   Arch.fromParams({this.aid, this.attribute, this.copyright, this.ctime, this.duration, this.pubdate, this.state, this.tid, this.videos, this.desc, this.dynamic, this.pic, this.title, this.tname, this.owner, this.rights, this.stat});
 
   Arch.fromJson(jsonRes) {
@@ -121,7 +107,6 @@ class Arch {
     owner = new Owner.fromJson(jsonRes['owner']);
     rights = new Rights.fromJson(jsonRes['rights']);
     stat = new Stat.fromJson(jsonRes['stat']);
-
   }
 
   @override
@@ -129,8 +114,6 @@ class Arch {
     return '{"aid": $aid,"attribute": $attribute,"copyright": $copyright,"ctime": $ctime,"duration": $duration,"pubdate": $pubdate,"state": $state,"tid": $tid,"videos": $videos,"desc": ${desc != null?'${json.encode(desc)}':'null'},"dynamic": ${dynamic != null?'${json.encode(dynamic)}':'null'},"pic": ${pic != null?'${json.encode(pic)}':'null'},"title": ${title != null?'${json.encode(title)}':'null'},"tname": ${tname != null?'${json.encode(tname)}':'null'},"owner": $owner,"rights": $rights,"stat": $stat}';
   }
 }
-
-
 
 class Stat {
 
@@ -145,7 +128,6 @@ class Stat {
   int share;
   int view;
 
-
   Stat.fromParams({this.aid, this.coin, this.danmaku, this.favorite, this.his_rank, this.like, this.now_rank, this.reply, this.share, this.view});
 
   Stat.fromJson(jsonRes) {
@@ -159,7 +141,6 @@ class Stat {
     reply = jsonRes['reply'];
     share = jsonRes['share'];
     view = jsonRes['view'];
-
   }
 
   @override
@@ -167,8 +148,6 @@ class Stat {
     return '{"aid": $aid,"coin": $coin,"danmaku": $danmaku,"favorite": $favorite,"his_rank": $his_rank,"like": $like,"now_rank": $now_rank,"reply": $reply,"share": $share,"view": $view}';
   }
 }
-
-
 
 class Rights {
 
@@ -180,7 +159,6 @@ class Rights {
   int no_reprint;
   int pay;
 
-
   Rights.fromParams({this.bp, this.download, this.elec, this.hd5, this.movie, this.no_reprint, this.pay});
 
   Rights.fromJson(jsonRes) {
@@ -191,7 +169,6 @@ class Rights {
     movie = jsonRes['movie'];
     no_reprint = jsonRes['no_reprint'];
     pay = jsonRes['pay'];
-
   }
 
   @override
@@ -200,14 +177,11 @@ class Rights {
   }
 }
 
-
-
 class Owner {
 
   int mid;
   String face;
   String name;
-
 
   Owner.fromParams({this.mid, this.face, this.name});
 
@@ -215,7 +189,6 @@ class Owner {
     mid = jsonRes['mid'];
     face = jsonRes['face'];
     name = jsonRes['name'];
-
   }
 
   @override
