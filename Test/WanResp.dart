@@ -8,21 +8,25 @@ class WanResp {
 
   WanResp.fromParams({this.errorCode, this.errorMsg, this.data});
 
-  factory WanResp(jsonStr) => jsonStr is String ? WanResp.fromJson(json.decode(jsonStr)) : WanResp.fromJson(jsonStr);
+  factory WanResp(jsonStr) =>
+      jsonStr == null ? null : jsonStr is String ? new WanResp.fromJson(json.decode(jsonStr)) : new WanResp.fromJson(
+          jsonStr);
 
   WanResp.fromJson(jsonRes) {
     errorCode = jsonRes['errorCode'];
     errorMsg = jsonRes['errorMsg'];
-    data = [];
+    data = jsonRes['data'] == null ? null : [];
 
-    for (var dataItem in jsonRes['data']){
-            data.add(new Data.fromJson(dataItem));
+    for (var dataItem in data == null ? [] : jsonRes['data']) {
+      data.add(dataItem == null ? null : new Data.fromJson(dataItem));
     }
   }
 
   @override
   String toString() {
-    return '{"errorCode": $errorCode,"errorMsg": ${errorMsg != null?'${json.encode(errorMsg)}':'null'},"data": $data}';
+    return '{"errorCode": $errorCode,"errorMsg": ${errorMsg != null
+        ? '${json.encode(errorMsg)}'
+        : 'null'},"data": $data}';
   }
 }
 
@@ -45,16 +49,17 @@ class Data {
     parentChapterId = jsonRes['parentChapterId'];
     visible = jsonRes['visible'];
     name = jsonRes['name'];
-    children = [];
+    children = jsonRes['children'] == null ? null : [];
 
-    for (var childrenItem in jsonRes['children']){
-            children.add(new Children.fromJson(childrenItem));
+    for (var childrenItem in children == null ? [] : jsonRes['children']) {
+      children.add(childrenItem == null ? null : new Children.fromJson(childrenItem));
     }
   }
 
   @override
   String toString() {
-    return '{"courseId": $courseId,"id": $id,"order": $order,"parentChapterId": $parentChapterId,"visible": $visible,"name": ${name != null?'${json.encode(name)}':'null'},"children": $children}';
+    return '{"courseId": $courseId,"id": $id,"order": $order,"parentChapterId": $parentChapterId,"visible": $visible,"name": ${name !=
+        null ? '${json.encode(name)}' : 'null'},"children": $children}';
   }
 }
 
@@ -68,7 +73,8 @@ class Children {
   String name;
   List<dynamic> children;
 
-  Children.fromParams({this.courseId, this.id, this.order, this.parentChapterId, this.visible, this.name, this.children});
+  Children.fromParams(
+      {this.courseId, this.id, this.order, this.parentChapterId, this.visible, this.name, this.children});
 
   Children.fromJson(jsonRes) {
     courseId = jsonRes['courseId'];
@@ -77,16 +83,17 @@ class Children {
     parentChapterId = jsonRes['parentChapterId'];
     visible = jsonRes['visible'];
     name = jsonRes['name'];
-    children = [];
+    children = jsonRes['children'] == null ? null : [];
 
-    for (var childrenItem in jsonRes['children']){
-            children.add(childrenItem);
+    for (var childrenItem in children == null ? [] : jsonRes['children']) {
+      children.add(childrenItem);
     }
   }
 
   @override
   String toString() {
-    return '{"courseId": $courseId,"id": $id,"order": $order,"parentChapterId": $parentChapterId,"visible": $visible,"name": ${name != null?'${json.encode(name)}':'null'},"children": $children}';
+    return '{"courseId": $courseId,"id": $id,"order": $order,"parentChapterId": $parentChapterId,"visible": $visible,"name": ${name !=
+        null ? '${json.encode(name)}' : 'null'},"children": $children}';
   }
 }
 

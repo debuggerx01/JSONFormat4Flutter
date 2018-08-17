@@ -67,7 +67,7 @@ def list_code_loop(code, count, total, n, ct):
 def build_list_construction(t, n):
     class_type = t.replace('List<', '').replace('>', '')
 
-    list_loop = '[];\n'
+    list_loop = 'jsonRes[\'%s\'] == null ? null : [];\n' % n
     assert isinstance(t, str)
 
     code = ''
@@ -78,7 +78,8 @@ def build_list_construction(t, n):
 
     # 嵌套模板的后续处理
     if check_level_type(class_type) not in (1, 2) and class_type != '':
-        code = code.replace('%s%s' % (n, 'Child' * total), 'new %s.fromJson(%s%s)' % (class_type, n, ('Item' * total)))
+        code = code.replace('%s%s' % (n, 'Child' * total), '%s%s == null ? null : new %s.fromJson(%s%s)'
+                            % (n, ('Item' * total), class_type, n, ('Item' * total)))
     else:
         code = code.replace('%s' % ('Child' * total), '%s' % ('Item' * total))
     code = code[code.find(';') + 1:]
@@ -117,7 +118,7 @@ def add_param_to_code(code, param):
 
     # dict类型处理，只需要修改construction中的输出方式
     elif t_code == 4:
-        code = code.replace('jsonRes[\'%s\']' % f, 'new %s.fromJson(jsonRes[\'%s\'])' % (t, f))
+        code = code.replace('jsonRes[\'%s\']' % f, 'jsonRes[\'%s\'] == null ? null : new %s.fromJson(jsonRes[\'%s\'])' % (f, t, f))
 
     # list类型处理，只需要修改construction中的输出方式
     elif t_code == 3:
@@ -200,44 +201,9 @@ def generate_code(work_bean):
     # 移除参数构造函数用模板生成后多余的逗号和空格
     res = res.replace(', });', '});')
 
-    # 利用利用大括号匹配移除无用行的计数器
-    remove_counter = 0
-    need_clean = False
-
     # 移除没有必要的list取值循环
     lines = res.splitlines()
     for index in range(len(lines)):
-        if r' = [];' in lines[index] and r'List<' not in lines[index]:
-            field_name = lines[index].strip()
-            field_name = field_name[:field_name.find(' ')]
-            need_clean = False
-            for revert_index in range(index - 1, 0, -1):
-                if r'> %s;' % field_name in lines[revert_index]:
-                    field_type = lines[revert_index]
-                    field_type = field_type[field_type.find('<') + 1:field_type.rfind('>')]
-                    if check_level_type(field_type) in (1, 2):
-                        # List的类型或嵌套类型为基本数据类型
-                        need_clean = True
-                    break
-            if need_clean:
-                # 利用大括号匹配移除无用行
-                sp = lines[index + 2].find('in ')
-                ep = lines[index + 2].rfind(')')
-                list_src = lines[index + 2][sp + 3:ep] + '.cast<%s>()' % field_type
-                lines[index] = lines[index].replace('[]', list_src)
-                continue
-
-        if need_clean:
-            lines[index] = '//%s' % lines[index]
-            if lines[index].strip() == '//':
-                continue
-            if lines[index].strip().endswith('{'):
-                remove_counter += 1
-            if lines[index].strip().endswith('}'):
-                remove_counter -= 1
-            if remove_counter == 0:
-                need_clean = False
-
         if lines[index].strip() == '' and index < len(lines) - 1 and lines[index + 1].strip() in ('', '}'):
             lines[index] = '//%s' % lines[index]
 
@@ -250,7 +216,8 @@ def generate_code(work_bean):
         out_res += (line + '\n')
         if first and r'.fromParams({this.' in line:
             class_name = line.split(r'.fromParams({this.')[0].strip()
-            out_res += '\n  factory %s(jsonStr) => jsonStr is String ? %s.fromJson(json.decode(jsonStr)) : %s.fromJson(jsonStr);\n' \
+            out_res += '\n  factory %s(jsonStr) => jsonStr == null ? null : jsonStr is String ? new %s.fromJson(json.decode(jsonStr)) : ' \
+                       'new %s.fromJson(jsonStr);\n' \
                        % (class_name, class_name, class_name)
             first = False
     return out_res

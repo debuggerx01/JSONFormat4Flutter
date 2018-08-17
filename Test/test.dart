@@ -8,10 +8,31 @@ import 'WanResp.dart';
 import 'ListsResp.dart';
 
 void main() {
+
+  test('Test null', (){
+    String str0 = '{"asd":[[[1]]],"qwe":[[[{"zxc":1}]]],"qaz":[1]}';
+    String str1 = '{"asd":[[[null,null]]],"qwe":[[[null]]],"qaz":[null,null,null]}';
+    String str2 = '{"asd":[[[]]],"qwe":[[[{"zxc":null}]]],"qaz":[null]}';
+    String str3 = '{"asd":[[]],"qwe":[[[]]],"qaz":null}';
+    String str4 = '{"asd":[],"qwe":[[]],"qaz":null}';
+    String str5 = '{"asd":null,"qwe":[],"qaz":null}';
+    String str6;
+    expect(json.decode(new ListsResp(str0).toString()), json.decode(str0));
+    expect(json.decode(new ListsResp(str1).toString()), json.decode(str1));
+    expect(json.decode(new ListsResp(str2).toString()), json.decode(str2));
+    expect(json.decode(new ListsResp(str3).toString()), json.decode(str3));
+    expect(json.decode(new ListsResp(str4).toString()), json.decode(str4));
+    expect(json.decode(new ListsResp(str5).toString()), json.decode(str5));
+    expect(json.decode(new ListsResp(str6).toString()), null);
+
+  });
   test('Test Region', () {
     String str = readFromFile('Region');
     RegionResp resp = new RegionResp(str);
     var jsonRes = json.decode(str);
+
+    /// 测试传入String和json进行解析的结果是否相同
+    expect(resp.toString(), new RegionResp(jsonRes).toString());
 
     /// 逐个字段检查是否与json.decode()的结果相同
     expect(resp.code, jsonRes['code']);
@@ -103,6 +124,9 @@ void main() {
     WanResp resp = new WanResp(str);
     var jsonRes = json.decode(str);
 
+    /// 测试传入String和json进行解析的结果是否相同
+    expect(resp.toString(), new WanResp(jsonRes).toString());
+
     /// 逐个字段检查是否与json.decode()的结果相同
     expect(resp.errorCode, jsonRes['errorCode']);
     expect(resp.errorMsg, jsonRes['errorMsg']);
@@ -146,6 +170,9 @@ void main() {
     EmptyResp resp = new EmptyResp(str);
     var jsonRes = json.decode(str);
 
+    /// 测试传入String和json进行解析的结果是否相同
+    expect(resp.toString(), new EmptyResp(jsonRes).toString());
+
     /// 逐个字段检查是否与json.decode()的结果相同
     expect(resp.qwe.asd, jsonRes['qwe']['asd']);
     expect(resp.qwe.zxc, jsonRes['qwe']['zxc']);
@@ -161,6 +188,9 @@ void main() {
     String str = readFromFile('Lists');
     ListsResp resp = new ListsResp(str);
     var jsonRes = json.decode(str);
+
+    /// 测试传入String和json进行解析的结果是否相同
+    expect(resp.toString(), new ListsResp(jsonRes).toString());
 
     /// 逐个字段检查是否与json.decode()的结果相同
     expect(resp.asd[0][0][0], jsonRes['asd'][0][0][0]);

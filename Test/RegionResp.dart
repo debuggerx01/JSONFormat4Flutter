@@ -9,13 +9,13 @@ class RegionResp {
 
   RegionResp.fromParams({this.code, this.ttl, this.message, this.data});
 
-  factory RegionResp(jsonStr) => jsonStr is String ? RegionResp.fromJson(json.decode(jsonStr)) : RegionResp.fromJson(jsonStr);
+  factory RegionResp(jsonStr) => jsonStr == null ? null : jsonStr is String ? new RegionResp.fromJson(json.decode(jsonStr)) : new RegionResp.fromJson(jsonStr);
 
   RegionResp.fromJson(jsonRes) {
     code = jsonRes['code'];
     ttl = jsonRes['ttl'];
     message = jsonRes['message'];
-    data = new Data.fromJson(jsonRes['data']);
+    data = jsonRes['data'] == null ? null : new Data.fromJson(jsonRes['data']);
   }
 
   @override
@@ -32,13 +32,13 @@ class Data {
   Data.fromParams({this.archives, this.page});
 
   Data.fromJson(jsonRes) {
-    archives = [];
+    archives = jsonRes['archives'] == null ? null : [];
 
-    for (var archivesItem in jsonRes['archives']){
-            archives.add(new Arch.fromJson(archivesItem));
+    for (var archivesItem in archives == null ? [] : jsonRes['archives']){
+            archives.add(archivesItem == null ? null : new Arch.fromJson(archivesItem));
     }
 
-    page = new Page.fromJson(jsonRes['page']);
+    page = jsonRes['page'] == null ? null : new Page.fromJson(jsonRes['page']);
   }
 
   @override
@@ -104,9 +104,9 @@ class Arch {
     pic = jsonRes['pic'];
     title = jsonRes['title'];
     tname = jsonRes['tname'];
-    owner = new Owner.fromJson(jsonRes['owner']);
-    rights = new Rights.fromJson(jsonRes['rights']);
-    stat = new Stat.fromJson(jsonRes['stat']);
+    owner = jsonRes['owner'] == null ? null : new Owner.fromJson(jsonRes['owner']);
+    rights = jsonRes['rights'] == null ? null : new Rights.fromJson(jsonRes['rights']);
+    stat = jsonRes['stat'] == null ? null : new Stat.fromJson(jsonRes['stat']);
   }
 
   @override

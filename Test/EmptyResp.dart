@@ -6,10 +6,10 @@ class EmptyResp {
 
   EmptyResp.fromParams({this.qwe});
 
-  factory EmptyResp(jsonStr) => jsonStr is String ? EmptyResp.fromJson(json.decode(jsonStr)) : EmptyResp.fromJson(jsonStr);
+  factory EmptyResp(jsonStr) => jsonStr == null ? null : jsonStr is String ? new EmptyResp.fromJson(json.decode(jsonStr)) : new EmptyResp.fromJson(jsonStr);
 
   EmptyResp.fromJson(jsonRes) {
-    qwe = new Qwe.fromJson(jsonRes['qwe']);
+    qwe = jsonRes['qwe'] == null ? null : new Qwe.fromJson(jsonRes['qwe']);
   }
 
   @override
@@ -27,17 +27,21 @@ class Qwe {
   Qwe.fromParams({this.asd, this.qaz, this.zxc});
 
   Qwe.fromJson(jsonRes) {
-    asd = [];
+    asd = jsonRes['asd'] == null ? null : [];
 
-    for (var asdItem in jsonRes['asd']){
+    for (var asdItem in asd == null ? [] : jsonRes['asd']){
             asd.add(asdItem);
     }
 
-    qaz = jsonRes['qaz'].cast<Object>();
+    qaz = jsonRes['qaz'] == null ? null : [];
 
-    zxc = [];
+    for (var qazItem in qaz == null ? [] : jsonRes['qaz']){
+            qaz.add(qazItem);
+    }
 
-    for (var zxcItem in jsonRes['zxc']){
+    zxc = jsonRes['zxc'] == null ? null : [];
+
+    for (var zxcItem in zxc == null ? [] : jsonRes['zxc']){
             zxc.add(zxcItem);
     }
   }

@@ -8,16 +8,16 @@ class ListsResp {
 
   ListsResp.fromParams({this.asd, this.qaz, this.qwe});
 
-  factory ListsResp(jsonStr) => jsonStr is String ? ListsResp.fromJson(json.decode(jsonStr)) : ListsResp.fromJson(jsonStr);
+  factory ListsResp(jsonStr) => jsonStr == null ? null : jsonStr is String ? new ListsResp.fromJson(json.decode(jsonStr)) : new ListsResp.fromJson(jsonStr);
 
   ListsResp.fromJson(jsonRes) {
-    asd = [];
+    asd = jsonRes['asd'] == null ? null : [];
 
-    for (var asdItem in jsonRes['asd']){
-  List<List<int>> asdChild = [];
-    for (var asdItemItem in asdItem){
-  List<int> asdChildChild = [];
-    for (var asdItemItemItem in asdItemItem){
+    for (var asdItem in asd == null ? [] : jsonRes['asd']){
+  List<List<int>> asdChild = asdItem == null ? null : [];
+    for (var asdItemItem in asdChild == null ? [] : asdItem){
+  List<int> asdChildChild = asdItemItem == null ? null : [];
+    for (var asdItemItemItem in asdChildChild == null ? [] : asdItemItem){
             asdChildChild.add(asdItemItemItem);
     }
       asdChild.add(asdChildChild);
@@ -25,16 +25,20 @@ class ListsResp {
       asd.add(asdChild);
     }
 
-    qaz = jsonRes['qaz'].cast<int>();
+    qaz = jsonRes['qaz'] == null ? null : [];
 
-    qwe = [];
+    for (var qazItem in qaz == null ? [] : jsonRes['qaz']){
+            qaz.add(qazItem);
+    }
 
-    for (var qweItem in jsonRes['qwe']){
-  List<List<Zxc>> qweChild = [];
-    for (var qweItemItem in qweItem){
-  List<Zxc> qweChildChild = [];
-    for (var qweItemItemItem in qweItemItem){
-            qweChildChild.add(new Zxc.fromJson(qweItemItemItem));
+    qwe = jsonRes['qwe'] == null ? null : [];
+
+    for (var qweItem in qwe == null ? [] : jsonRes['qwe']){
+  List<List<Zxc>> qweChild = qweItem == null ? null : [];
+    for (var qweItemItem in qweChild == null ? [] : qweItem){
+  List<Zxc> qweChildChild = qweItemItem == null ? null : [];
+    for (var qweItemItemItem in qweChildChild == null ? [] : qweItemItem){
+            qweChildChild.add(qweItemItemItem == null ? null : new Zxc.fromJson(qweItemItemItem));
     }
       qweChild.add(qweChildChild);
     }
