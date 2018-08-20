@@ -5,6 +5,8 @@
 # @Author   :   DebuggerX
 
 import configparser
+import os
+import sys
 from urllib import request
 from json import loads
 
@@ -19,12 +21,19 @@ ignore_code = 0.0
 check_last_version_thread = None
 
 
+def get_exe_path():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    else:
+        return os.path.dirname(__file__)
+
+
 def _check_ignore_version():
     config = configparser.ConfigParser()
     global ignore_code
     # noinspection PyBroadException
     try:
-        config.read('.ignore.cfg')
+        config.read(os.path.join(get_exe_path(), '.ignore.cfg'))
         ignore_code = float(config.get('version', 'code'))
     except Exception:
         pass
@@ -48,16 +57,22 @@ class CheckLastVersion(QThread):
 
 
 def check_last_version_handler(json_obj):
-    res = QMessageBox().information(msg_box_ui, "有新版本更新！", "新版本(v%s)更新内容：\n%s\n\n点击[确定]转跳到下载页，点击[取消]忽略该版本提醒" % (json_obj['code'], json_obj['desc']),
-                                    QMessageBox.Ok,
-                                    QMessageBox.Cancel)
-    if res == QMessageBox.Cancel:
+    msg_box = QMessageBox()
+    msg_box.addButton('确定', QMessageBox.AcceptRole)
+    msg_box.addButton('忽略', QMessageBox.NoRole)
+    msg_box.addButton('关闭', QMessageBox.RejectRole)
+    msg_box.setParent(msg_box_ui)
+    msg_box.setWindowTitle("有新版本更新！")
+    msg_box.setText("新版本(v%s)更新内容：\n%s\n\n点击[确定]转跳到下载页，点击[忽略]忽略该版本提醒，点击[关闭]退出本提示框" % (json_obj['code'], json_obj['desc']))
+
+    res = msg_box.exec()
+    if res == QMessageBox.RejectRole:
         config = configparser.ConfigParser()
         config.add_section('version')
         config.set('version', 'code', str(json_obj['code']))
-        with open('.ignore.cfg', 'w') as configfile:
+        with open(os.path.join(get_exe_path(), '.ignore.cfg'), 'w') as configfile:
             config.write(configfile)
-    else:
+    elif res == QMessageBox.AcceptRole:
         QtGui.QDesktopServices.openUrl(QtCore.QUrl('https://github.com/debuggerx01/JSONFormat4Flutter/releases'))
 
 
