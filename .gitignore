@@ -1,8 +1,0 @@
-# Created by .ignore support plugin (hsz.mobi)
-
-.idea
-*.pyc
-
-Test/.dart_tool
-Test/.idea
-Test/.packages

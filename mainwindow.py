@@ -78,7 +78,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "JSONFormat4Flutter(v0.5)"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "JSONFormat4Flutter(vcode)"))
         self.btn_format.setText(_translate("MainWindow", "格式化"))
         self.btn_copy.setText(_translate("MainWindow", "复制"))
         self.btn_generate.setText(_translate("MainWindow", "生成Bean"))

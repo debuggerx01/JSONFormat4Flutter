@@ -7,6 +7,7 @@ from functools import partial
 
 from mainwindow import *
 from tools import *
+from check_version import *
 
 # 第三方库 用于解决跨平台的复制粘贴和复制的文本带bom问题
 import pyperclip
@@ -251,4 +252,6 @@ if __name__ == "__main__":
     # 在生成代码的基础上再修改UI以及添加逻辑
     custom_ui()
     widget.show()
+    code = check_version()
+    widget.setWindowTitle(widget.windowTitle().replace('code',str(code)))
     sys.exit(app.exec_())
