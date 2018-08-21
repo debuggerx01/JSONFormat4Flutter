@@ -6,6 +6,7 @@
 
 import configparser
 import os
+import ssl
 import sys
 from urllib import request
 from json import loads
@@ -15,7 +16,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QMessageBox
 from tools import msg_box_ui
 
-code = 0.5
+code = 0.6
 ignore_code = 0.0
 
 check_last_version_thread = None
@@ -46,7 +47,8 @@ class CheckLastVersion(QThread):
         res_json = None
         # noinspection PyBroadException
         try:
-            res = request.urlopen('https://raw.githubusercontent.com/debuggerx01/JSONFormat4Flutter/master/version')
+            res = request.urlopen('https://raw.githubusercontent.com/debuggerx01/JSONFormat4Flutter/master/version',
+                                  context=ssl._create_unverified_context())
             res_json = loads(res.read().decode())
         except Exception:
             pass
