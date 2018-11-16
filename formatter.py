@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# @Filename :   formater.py
+# @Filename :   formatter.py
 # @Date     :   18-1-26 下午5:48
 # @Author   :   DebuggerX
 from functools import partial
@@ -13,7 +13,7 @@ from check_version import *
 import pyperclip
 
 # 定义显示的json格式化字符串的缩进量为4个空格
-indent = '    '
+indent = ' ' * 4
 
 # 临时存储
 last_list_com_box = None
@@ -110,6 +110,7 @@ def get_type_combobox(need_connect, line):
 
         com_box.setCurrentIndex(obj_type)
     elif obj_type == 8:
+        com_box.addItem('Map<String, dynamic>')
         com_box.setCurrentText('')
     elif obj_type == 9:
         com_box.setCurrentText('List<>')
@@ -253,5 +254,5 @@ if __name__ == "__main__":
     custom_ui()
     widget.show()
     code = check_version()
-    widget.setWindowTitle(widget.windowTitle().replace('code',str(code)))
+    widget.setWindowTitle(widget.windowTitle().replace('code', str(code)))
     sys.exit(app.exec_())

@@ -6,6 +6,7 @@ import 'EmptyResp.dart';
 import 'RegionResp.dart';
 import 'WanResp.dart';
 import 'ListsResp.dart';
+import 'IgnoreMapResp.dart';
 
 void main() {
 
@@ -201,6 +202,30 @@ void main() {
     expect(jsonRes, json.decode(resp.toString()));
 });
 
+  test('test ignore map', () {
+
+    String str = readFromFile('IgnoreMap');
+    IgnoreMapResp resp = new IgnoreMapResp(str);
+    var jsonRes = json.decode(str);
+
+    /// 测试传入String和json进行解析的结果是否相同
+    expect(resp.toString(), new IgnoreMapResp(jsonRes).toString());
+
+    /// 逐个字段检查是否与json.decode()的结果相同
+    expect(resp.data.wc, jsonRes['data']['wc']);
+    expect(resp.data.author, jsonRes['data']['author']);
+    expect(resp.data.content, jsonRes['data']['content']);
+    expect(resp.data.digest, jsonRes['data']['digest']);
+    expect(resp.data.title, jsonRes['data']['title']);
+    expect(resp.data.extra.a, jsonRes['data']['extra']['a']);
+    expect(resp.data.extra.b, jsonRes['data']['extra']['b']);
+    expect(resp.data.extra.c, jsonRes['data']['extra']['c']);
+    expect(resp.data.date, jsonRes['data']['date']);
+
+    /// 检查bean对象toString还原成json字符串后再交给json解析的结果是否与原始字符串相同
+    expect(jsonRes, json.decode(resp.toString()));
+  });
+
 
 }
 
@@ -208,5 +233,7 @@ String readFromFile(String name) {
   String str = new File('${name}Test.json').readAsStringSync();
   int index1 = str.indexOf('{');
   int index2 = str.indexOf('[');
+  index1 = index1 == -1 ? 0: index1;
+  index2 = index2 == -1 ? 0: index2;
   return str.substring(min(index1, index2));
 }
