@@ -54,7 +54,14 @@ def analyse_json_obj(json_obj, level=0, res=None, json_key=None):
         else:
             res.append('%s<%s> : <[list]>9' % (indent * level, json_key))
         if len(json_obj) > 0:
-            analyse_json_obj(json_obj[0], level + 1, res)
+            json_obj_temp = json_obj[0] if json_obj[0] is not None else {}
+            if len(list(filter(lambda item: type(item) is dict or item is None, json_obj))) == len(json_obj):
+                for i in range(1, len(json_obj)):
+                    for k in json_obj[i]:
+                        if json_obj_temp is None or (k not in json_obj_temp or json_obj_temp[k] is None):
+                            json_obj_temp[k] = json_obj[i][k]
+            json_obj_temp = None if json_obj_temp is {} else json_obj_temp
+            analyse_json_obj(json_obj_temp, level + 1, res)
 
     else:
         # 针对基本数据类型，在插入的键值对数据后再加入类型序号标志位
@@ -207,11 +214,32 @@ def generate_bean():
         ui.te_json.setText(res)
 
 
+def str_to_camel_case(text):
+    try:
+        arr = filter(None, text.split('_'))
+        res = ''
+        for i in arr:
+            res = res + i[0].upper() + i[1:]
+        return res[0].lower() + res[1:]
+    except IndexError:
+        return text
+
+
+def convert_names_to_camel_case(index):
+    if ui.tv_fields.horizontalHeaderItem(index).text() == 'Name(click to camelCase)':
+        for i in range(ui.tv_fields.rowCount()):
+            name_cell = ui.tv_fields.cellWidget(i, 2)
+            if type(name_cell) is QtWidgets.QTextEdit:
+                assert isinstance(name_cell, QtWidgets.QTextEdit)
+                name_cell.setText(str_to_camel_case(name_cell.toPlainText()))
+
+
 def init_event():
     # 绑定json解析按钮事件
     ui.btn_format.clicked.connect(json_format)
     ui.btn_generate.clicked.connect(generate_bean)
     ui.btn_copy.clicked.connect(copy_left_text)
+    ui.tv_fields.horizontalHeader().sectionClicked.connect(convert_names_to_camel_case)
 
 
 def copy_left_text():
@@ -223,7 +251,7 @@ def copy_left_text():
 # 设置表格基础样式
 def init_table():
     # 设置表头，表头文字居中
-    ui.tv_fields.setHorizontalHeaderLabels(['Fields', 'Types', 'Name'])
+    ui.tv_fields.setHorizontalHeaderLabels(['Fields', 'Types', 'Name(click to camelCase)'])
     ui.tv_fields.horizontalHeader().setDefaultAlignment(QtCore.Qt.AlignHCenter)
     # 表头自动平分宽度
     ui.tv_fields.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)

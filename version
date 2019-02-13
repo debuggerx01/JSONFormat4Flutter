@@ -1,4 +1,4 @@
 {
   "code": 0.7,
-  "desc": "可以通过下拉框将对象类型设置为Map<String, dynamic>来避免该对象字段的解析，参考issue #13\n"
+  "desc": "1.可以通过下拉框将对象类型设置为Map<String, dynamic>来避免该对象字段的解析，参考issue #13\n2.点击Name栏使字段转为驼峰 & 解析List的时候读取多个元素，参考issue #17"
 }
