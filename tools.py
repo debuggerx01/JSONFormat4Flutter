@@ -67,10 +67,10 @@ def list_code_loop(code, count, total, n, ct):
 
 
 # 向代码模板中插入变量
-def build_list_construction(t, n):
+def build_list_construction(t, f, n):
     class_type = t.replace('List<', '').replace('>', '')
 
-    list_loop = 'jsonRes[\'%s\'] == null ? null : [];\n' % n
+    list_loop = 'jsonRes[\'%s\'] == null ? null : [];\n' % f
     assert isinstance(t, str)
 
     code = ''
@@ -124,7 +124,7 @@ def add_param_to_code(code, param):
 
     # list类型处理，只需要修改construction中的输出方式
     elif t_code == 3:
-        list_loop = build_list_construction(t, n)
+        list_loop = build_list_construction(t, f, n)
 
         code = code.replace('jsonRes[\'%s\'];' % f, list_loop)
 
