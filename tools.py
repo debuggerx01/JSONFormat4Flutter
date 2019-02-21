@@ -99,7 +99,7 @@ def add_param_to_code(code, param):
     this_properties = 'this.%s, ' % n
     construction = '    %s = jsonRes[\'%s\'];\n' % (n, f)
     to_string = '"%s": $%s,' % (f, n)
-    equals = ' &&&& %s == other.%s' % (n, n)
+    equals = ' &&\n        %s == other.%s' % (n, n)
 
     pp = code.find('${properties}')
     code = code[:pp] + properties + code[pp:]
@@ -115,7 +115,6 @@ def add_param_to_code(code, param):
 
     pe = code.find('${equals}')
     code = code[:pe + 9] + equals + code[pe + 9:]
-    code = code.replace(" &&&& ", " &&\n        ")
 
     code = code.replace('${hash}', '$jc(${hash}, ' + n + '.hashCode)')
 
