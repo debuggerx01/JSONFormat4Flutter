@@ -99,6 +99,7 @@ def add_param_to_code(code, param):
     this_properties = 'this.%s, ' % n
     construction = '    %s = jsonRes[\'%s\'];\n' % (n, f)
     to_string = '"%s": $%s,' % (f, n)
+    equals = ' &&&& %s == other.%s' % (n, n)
 
     pp = code.find('${properties}')
     code = code[:pp] + properties + code[pp:]
@@ -111,6 +112,12 @@ def add_param_to_code(code, param):
 
     ps = code.find('${toString}')
     code = code[:ps] + to_string + code[ps:]
+
+    pe = code.find('${equals}')
+    code = code[:pe + 9] + equals + code[pe + 9:]
+    code = code.replace(" &&&& ", " &&\n        ")
+
+    code = code.replace('${hash}', '$jc(${hash}, ' + n + '.hashCode)')
 
     t_code = check_level_type(t)
 
@@ -169,7 +176,15 @@ def build_level_code(level_bean):
 
             # 不管如何，到这里的数据都是目前dict的一级子数据，作为参数传入模板中
             code = add_param_to_code(code, (f, t, n))
-        codes.append(code.replace(',${toString}', '').replace('${construction}', '').replace('${properties}', '').replace('${this.properties}', ''))
+
+        codes.append(code
+                     .replace(',${toString}', '')
+                     .replace('${construction}', '')
+                     .replace('${properties}', '')
+                     .replace('${this.properties}', '')
+                     .replace('${equals}', '')
+                     .replace('${hash}', '0')
+                     )
 
 
 def generate_code(work_bean):
@@ -211,6 +226,7 @@ def generate_code(work_bean):
 
     # 最终修改，添加json库导包代码，并为顶层对象增加默认构造
     out_res = 'import \'dart:convert\' show json;\n'
+    out_res = out_res + "import 'package:built_value/built_value.dart' show $jc, $jf;\n"
     first = True
     for line in lines:
         if line.startswith('//'):
