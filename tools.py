@@ -86,7 +86,7 @@ def build_list_construction(t, f, n):
     else:
         code = code.replace('%s' % ('Child' * total), '%s' % ('Item' * total))
     code = code[code.find(';') + 1:]
-    code = code.replace('%s){' % n, 'jsonRes[\'%s\']){' % n).replace('${loop}\n', '')
+    code = code.replace('%s){' % n, 'jsonRes[\'%s\']){' % n).replace('${loop}\n', '').replace('jsonRes[\'%s\']){' % n, 'jsonRes[\'%s\']){' % f)
 
     return list_loop + code
 
