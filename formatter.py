@@ -139,7 +139,8 @@ def update_list(json_str):
     json_obj = json.loads(json_str)
     # 传入json对象，返回所需要的格式化协议数据数组
     res = analyse_json_obj(json_obj)
-
+    global last_list_com_box
+    last_list_com_box = None
     ui.tv_fields.setRowCount(len(res))
 
     pre_type_combobox = None
