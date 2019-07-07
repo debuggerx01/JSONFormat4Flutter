@@ -32,6 +32,9 @@ def jformat(inp):
 
 
 def check_level_type(t):
+    if t == 'Map<String, dynamic>':
+        # 不用处理的Map类型
+        return 0
     if t in ('int', 'double', 'bool', 'Object'):
         # 普通数据类型
         return 1
@@ -64,10 +67,10 @@ def list_code_loop(code, count, total, n, ct):
 
 
 # 向代码模板中插入变量
-def build_list_construction(t, n):
+def build_list_construction(t, f, n):
     class_type = t.replace('List<', '').replace('>', '')
 
-    list_loop = 'jsonRes[\'%s\'] == null ? null : [];\n' % n
+    list_loop = 'jsonRes[\'%s\'] == null ? null : [];\n' % f
     assert isinstance(t, str)
 
     code = ''
@@ -83,7 +86,7 @@ def build_list_construction(t, n):
     else:
         code = code.replace('%s' % ('Child' * total), '%s' % ('Item' * total))
     code = code[code.find(';') + 1:]
-    code = code.replace('%s){' % n, 'jsonRes[\'%s\']){' % n).replace('${loop}\n', '')
+    code = code.replace('%s){' % n, 'jsonRes[\'%s\']){' % n).replace('${loop}\n', '').replace('jsonRes[\'%s\']){' % n, 'jsonRes[\'%s\']){' % f)
 
     return list_loop + code
 
@@ -109,11 +112,10 @@ def add_param_to_code(code, param):
     ps = code.find('${toString}')
     code = code[:ps] + to_string + code[ps:]
 
-    # 字符串类型处理,只需要修改toString中的输出方式
-
     t_code = check_level_type(t)
 
-    if t_code == 2:
+    # 字符串类型和Map类型处理,只需要修改toString中的输出方式
+    if t_code in [0, 2]:
         code = code.replace(': $%s' % n, ': ${%s != null?\'${json.encode(%s)}\':\'null\'}' % (n, n))
 
     # dict类型处理，只需要修改construction中的输出方式
@@ -122,7 +124,7 @@ def add_param_to_code(code, param):
 
     # list类型处理，只需要修改construction中的输出方式
     elif t_code == 3:
-        list_loop = build_list_construction(t, n)
+        list_loop = build_list_construction(t, f, n)
 
         code = code.replace('jsonRes[\'%s\'];' % f, list_loop)
 
@@ -227,16 +229,22 @@ def check_and_generate_code(bean):
     work_bean = []
     global msg_box_ui
     msg_box_ui = bean[0][1]
-
+    ignore_level = None
     for f, t, n in bean:
         field_text = f.text()
 
         level = field_text.find('※') // 4
+        if ignore_level is not None and level > ignore_level:
+            continue
+        ignore_level = None
+
         field_text = field_text[field_text.find("》") + 1: field_text.find(":") - 1] if ":" in field_text else ''
         type_text = t.currentText() if type(t) is QComboBox else t.toPlainText()
         name_text = n.text() if type(n) is QLabel else n.toPlainText()
+        if type_text == 'Map<String, dynamic>':
+            ignore_level = level
 
-        if type_text.strip() != '':
+        if type_text.strip() != '' or ignore_level is not None:
             work_bean.append([level, field_text, type_text, name_text])
         else:
             QMessageBox().information(msg_box_ui, "警告", "字段类型未设置", QMessageBox.Ok)
