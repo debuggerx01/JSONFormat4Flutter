@@ -12,7 +12,7 @@ class ${type} {
 ${properties}
 
   ${type}.fromParams({${this.properties}});
-  
+
   ${type}.fromJson(jsonRes) {
 ${construction}
   }
@@ -20,6 +20,17 @@ ${construction}
   @override
   String toString() {
     return '{${toString}}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is ${type}${equals};
+  }
+
+  @override
+  int get hashCode {
+    return $jf(${hash});
   }
 }
 
