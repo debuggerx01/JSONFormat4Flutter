@@ -81,7 +81,7 @@ def build_list_construction(t, f, n):
 
     # 嵌套模板的后续处理
     if check_level_type(class_type) not in (1, 2) and class_type != '':
-        code = code.replace('%s%s' % (n, 'Child' * total), '%s%s == null ? null : new %s.fromJson(%s%s)'
+        code = code.replace('%s%s' % (n, 'Child' * total), '%s%s == null ? null : %s.fromJson(%s%s)'
                             % (n, ('Item' * total), class_type, n, ('Item' * total)))
     else:
         code = code.replace('%s' % ('Child' * total), '%s' % ('Item' * total))
@@ -98,7 +98,7 @@ def add_param_to_code(code, param):
     properties = '  %s %s;\n' % (t, n)
     this_properties = 'this.%s, ' % n
     construction = '    %s = jsonRes[\'%s\'];\n' % (n, f)
-    to_string = '"%s": $%s,' % (f, n)
+    to_string = '"%s": $%s, ' % (f, n)
 
     pp = code.find('${properties}')
     code = code[:pp] + properties + code[pp:]
@@ -120,7 +120,7 @@ def add_param_to_code(code, param):
 
     # dict类型处理，只需要修改construction中的输出方式
     elif t_code == 4:
-        code = code.replace('jsonRes[\'%s\']' % f, 'jsonRes[\'%s\'] == null ? null : new %s.fromJson(jsonRes[\'%s\'])' % (f, t, f))
+        code = code.replace('jsonRes[\'%s\']' % f, 'jsonRes[\'%s\'] == null ? null : %s.fromJson(jsonRes[\'%s\'])' % (f, t, f))
 
     # list类型处理，只需要修改construction中的输出方式
     elif t_code == 3:
@@ -169,7 +169,7 @@ def build_level_code(level_bean):
 
             # 不管如何，到这里的数据都是目前dict的一级子数据，作为参数传入模板中
             code = add_param_to_code(code, (f, t, n))
-        codes.append(code.replace(',${toString}', '').replace('${construction}', '').replace('${properties}', '').replace('${this.properties}', ''))
+        codes.append(code.replace(', ${toString}', '').replace('${construction}', '').replace('${properties}', '').replace('${this.properties}', ''))
 
 
 def generate_code(work_bean):
@@ -195,7 +195,7 @@ def generate_code(work_bean):
 
     # 如果顶级容器为list,需要修改第一次获取JSON对象的方式为直接获取
     if is_list_top:
-        res = res.replace('jsonRes[\'list\']', 'jsonRes', 1)
+        res = res.replace('jsonRes[\'json_list\']', 'jsonRes', 2)
 
     # 如果json中存在空list这种操蛋情况，将list类型从list<>修改成list<dynamic>
     res = res.replace('List<>', 'List<dynamic>')
@@ -218,8 +218,8 @@ def generate_code(work_bean):
         out_res += (line + '\n')
         if first and r'.fromParams({this.' in line:
             class_name = line.split(r'.fromParams({this.')[0].strip()
-            out_res += '\n  factory %s(jsonStr) => jsonStr == null ? null : jsonStr is String ? new %s.fromJson(json.decode(jsonStr)) : ' \
-                       'new %s.fromJson(jsonStr);\n' \
+            out_res += '\n  factory %s(jsonStr) => jsonStr == null ? null : jsonStr is String ? %s.fromJson(json.decode(jsonStr)) : ' \
+                       '%s.fromJson(jsonStr);\n' \
                        % (class_name, class_name, class_name)
             first = False
     return out_res

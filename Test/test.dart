@@ -7,6 +7,7 @@ import 'RegionResp.dart';
 import 'WanResp.dart';
 import 'ListsResp.dart';
 import 'IgnoreMapResp.dart';
+import 'ListTopResp.dart';
 
 void main() {
 
@@ -226,6 +227,15 @@ void main() {
     expect(jsonRes, json.decode(resp.toString()));
   });
 
+  test('test list top json', () {
+    String str = readFromFile('ListTop');
+    ListTopResp resp = ListTopResp(str);
+
+    var jsonRes = json.decode(str);
+    /// 测试传入String和json进行解析的结果是否相同
+    expect(resp.toString(), new ListTopResp(jsonRes).toString());
+    expect(resp.list.toString().replaceAll(' ', ''), json.encode(jsonRes).replaceAll('\n', '').replaceAll(' ', ''));
+  });
 
 }
 

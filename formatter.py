@@ -54,11 +54,11 @@ def analyse_json_obj(json_obj, level=0, res=None, json_key=None):
         else:
             res.append('%s<%s> : <[list]>9' % (indent * level, json_key))
         if len(json_obj) > 0:
-            json_obj_temp = json_obj[0] if json_obj[0] is not None else {}
+            json_obj_temp = json_obj[0]
             if len(list(filter(lambda item: type(item) is dict or item is None, json_obj))) == len(json_obj):
                 for i in range(1, len(json_obj)):
-                    for k in json_obj[i]:
-                        if json_obj_temp is None or (k not in json_obj_temp or json_obj_temp[k] is None):
+                    for k in json_obj[i] if json_obj[i] is not None else {}:
+                        if json_obj_temp is not None and (k not in json_obj_temp or json_obj_temp[k] is None):
                             json_obj_temp[k] = json_obj[i][k]
             json_obj_temp = None if json_obj_temp is {} else json_obj_temp
             analyse_json_obj(json_obj_temp, level + 1, res)
