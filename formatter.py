@@ -183,7 +183,8 @@ def update_list(json_str):
 def json_format():
     # 从文本编辑框获取json字符串
     json_str = ui.te_json.toPlainText()
-    if is_json(json_str.strip()):
+    json_str = rm_invisible(json_str.strip())
+    if is_json(json_str):
         # 将格式化后的json字符串覆盖到文本编辑框中
         ui.te_json.setText(jformat(json_str.replace('\n', '')))
 
@@ -212,7 +213,7 @@ def generate_bean():
         QMessageBox().information(msg_box_ui, "警告", "发生错误", QMessageBox.Ok)
         return
     if res != '':
-        ui.te_json.setText(res)
+        ui.te_json.setText(rm_invisible(res.strip()))
 
 
 def str_to_camel_case(text):

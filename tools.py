@@ -5,6 +5,9 @@
 # @Author   :   DebuggerX
 
 import json
+
+from string import printable
+
 from PyQt5.QtWidgets import QLabel, QComboBox, QMessageBox
 
 from template_code import get_top_code_dict, get_list_code_loop
@@ -12,10 +15,14 @@ from template_code import get_top_code_dict, get_list_code_loop
 msg_box_ui = None
 
 
+def rm_invisible(string):
+    return ''.join(char for char in string if char in printable)
+
+
 # 验证json字符串是否合法
-def is_json(myjson):
+def is_json(my_json):
     try:
-        j = json.loads(myjson)
+        j = json.loads(my_json)
     except ValueError:
         return False
     if type(j) in (list, dict):
