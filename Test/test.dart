@@ -8,6 +8,7 @@ import 'WanResp.dart';
 import 'ListsResp.dart';
 import 'IgnoreMapResp.dart';
 import 'ListTopResp.dart';
+import 'ListWithStringResp.dart';
 
 void main() {
 
@@ -235,6 +236,16 @@ void main() {
     /// 测试传入String和json进行解析的结果是否相同
     expect(resp.toString(), new ListTopResp(jsonRes).toString());
     expect(resp.list.toString().replaceAll(' ', ''), json.encode(jsonRes).replaceAll('\n', '').replaceAll(' ', ''));
+  });
+
+  test('test list with string', () {
+    String str = readFromFile('ListWithString');
+    ListWithStringResp resp = ListWithStringResp(str);
+
+    var jsonRes = json.decode(str);
+    /// 测试传入String和json进行解析的结果是否相同
+    expect(resp.toString(), new ListWithStringResp(jsonRes).toString());
+    expect(resp.toString().replaceAll(' ', ''), json.encode(jsonRes).replaceAll('\n', '').replaceAll(' ', ''));
   });
 
 }
