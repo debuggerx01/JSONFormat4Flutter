@@ -121,8 +121,8 @@ def add_param_to_code(code, param):
 
     t_code = check_level_type(t)
 
-    # 字符串类型和Map类型处理,只需要修改toString中的输出方式
-    if t_code in [0, 2]:
+    # 字符串类型、List<String>类型和Map类型处理,需要修改toString中的输出方式
+    if t_code in [0, 2] or 'List<String>' in t:
         code = code.replace(': $%s' % n, ': ${%s != null?\'${json.encode(%s)}\':\'null\'}' % (n, n))
 
     # dict类型处理，只需要修改construction中的输出方式
@@ -130,7 +130,7 @@ def add_param_to_code(code, param):
         code = code.replace('jsonRes[\'%s\']' % f, 'jsonRes[\'%s\'] == null ? null : %s.fromJson(jsonRes[\'%s\'])' % (f, t, f))
 
     # list类型处理，只需要修改construction中的输出方式
-    elif t_code == 3:
+    if t_code == 3:
         list_loop = build_list_construction(t, f, n)
 
         code = code.replace('jsonRes[\'%s\'];' % f, list_loop)
@@ -225,8 +225,8 @@ def generate_code(work_bean):
         out_res += (line + '\n')
         if first and r'.fromParams({this.' in line:
             class_name = line.split(r'.fromParams({this.')[0].strip()
-            out_res += '\n  factory %s(jsonStr) => jsonStr == null ? null : jsonStr is String ? %s.fromJson(json.decode(jsonStr)) : ' \
-                       '%s.fromJson(jsonStr);\n' \
+            out_res += '\n  factory %s(jsonStr) => [\'null\', \'\', null].contains(jsonStr) ? null : ' \
+                       'jsonStr is String ? %s.fromJson(json.decode(jsonStr)) : %s.fromJson(jsonStr);\n' \
                        % (class_name, class_name, class_name)
             first = False
     return out_res

@@ -5,4 +5,4 @@ env PUB_ALLOW_PRERELEASE_SDK=quiet $(echo $(which flutter) | awk '{print substr(
 
 # 运行测试
 echo test start...
-$(echo $(which flutter) | awk '{print substr($0,0,length()-7)}')cache/dart-sdk/bin/dart --preview-dart-2 test.dart
+$(echo $(which flutter) | awk '{print substr($0,0,length()-7)}')cache/dart-sdk/bin/dart --preview-dart-2 --null_safety test.dart

@@ -1,0 +1,5 @@
+{
+  "asd": ["asd", "zxc", "qwe"],
+  "qaz": [["qaz"]],
+  "zxc": [{"qwe": "qwe"}]
+}
