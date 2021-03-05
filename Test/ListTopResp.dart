@@ -5,7 +5,7 @@ class ListTopResp {
 
   ListTopResp.fromParams({this.list});
 
-  factory ListTopResp(jsonStr) => jsonStr is String
+  factory ListTopResp(Object jsonStr) => jsonStr is String
       ? ListTopResp.fromJson(json.decode(jsonStr))
       : ListTopResp.fromJson(jsonStr);
 

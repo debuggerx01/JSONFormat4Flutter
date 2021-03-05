@@ -5,7 +5,7 @@ class IgnoreMapResp {
 
   IgnoreMapResp.fromParams({this.data});
 
-  factory IgnoreMapResp(jsonStr) => jsonStr is String
+  factory IgnoreMapResp(Object jsonStr) => jsonStr is String
       ? IgnoreMapResp.fromJson(json.decode(jsonStr))
       : IgnoreMapResp.fromJson(jsonStr);
 

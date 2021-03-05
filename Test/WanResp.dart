@@ -7,7 +7,7 @@ class WanResp {
 
   WanResp.fromParams({this.errorCode, this.errorMsg, this.data});
 
-  factory WanResp(jsonStr) => jsonStr is String
+  factory WanResp(Object jsonStr) => jsonStr is String
       ? WanResp.fromJson(json.decode(jsonStr))
       : WanResp.fromJson(jsonStr);
 

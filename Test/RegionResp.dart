@@ -8,7 +8,7 @@ class RegionResp {
 
   RegionResp.fromParams({this.code, this.ttl, this.message, this.data});
 
-  factory RegionResp(jsonStr) => jsonStr is String
+  factory RegionResp(Object jsonStr) => jsonStr is String
       ? RegionResp.fromJson(json.decode(jsonStr))
       : RegionResp.fromJson(jsonStr);
 

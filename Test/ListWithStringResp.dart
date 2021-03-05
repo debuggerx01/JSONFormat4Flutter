@@ -7,7 +7,7 @@ class ListWithStringResp {
 
   ListWithStringResp.fromParams({this.asd, this.qaz, this.zxc});
 
-  factory ListWithStringResp(jsonStr) => jsonStr is String
+  factory ListWithStringResp(Object jsonStr) => jsonStr is String
       ? ListWithStringResp.fromJson(json.decode(jsonStr))
       : ListWithStringResp.fromJson(jsonStr);
 

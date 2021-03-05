@@ -5,7 +5,7 @@ class EmptyResp {
 
   EmptyResp.fromParams({this.qwe});
 
-  factory EmptyResp(jsonStr) => jsonStr is String
+  factory EmptyResp(Object jsonStr) => jsonStr is String
       ? EmptyResp.fromJson(json.decode(jsonStr))
       : EmptyResp.fromJson(jsonStr);
 

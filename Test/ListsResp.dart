@@ -7,7 +7,7 @@ class ListsResp {
 
   ListsResp.fromParams({this.asd, this.qaz, this.qwe});
 
-  factory ListsResp(jsonStr) => jsonStr is String
+  factory ListsResp(Object jsonStr) => jsonStr is String
       ? ListsResp.fromJson(json.decode(jsonStr))
       : ListsResp.fromJson(jsonStr);
 
