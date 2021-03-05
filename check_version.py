@@ -16,7 +16,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QMessageBox
 from tools import msg_box_ui
 
-code = 0.8
+code = 0.9
 ignore_code = 0.0
 
 check_last_version_thread = None

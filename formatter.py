@@ -284,5 +284,5 @@ if __name__ == "__main__":
     custom_ui()
     widget.show()
     code = check_version()
-    widget.setWindowTitle(widget.windowTitle().replace('code', str(code)))
+    widget.setWindowTitle(widget.windowTitle().replace('code', str(code) + '-nullsafety'))
     sys.exit(app.exec_())

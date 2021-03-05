@@ -1,52 +1,53 @@
 import 'dart:convert' show json;
 
 class ListsResp {
-  List<List<List<int>>> asd;
-  List<int> qaz;
-  List<List<List<Zxc>>> qwe;
+  List<List<List<int?>?>?>? asd;
+  List<int?>? qaz;
+  List<List<List<Zxc?>?>?>? qwe;
 
   ListsResp.fromParams({this.asd, this.qaz, this.qwe});
 
-  factory ListsResp(jsonStr) => jsonStr == null
-      ? null
-      : jsonStr is String
-          ? ListsResp.fromJson(json.decode(jsonStr))
-          : ListsResp.fromJson(jsonStr);
+  factory ListsResp(jsonStr) => jsonStr is String
+      ? ListsResp.fromJson(json.decode(jsonStr))
+      : ListsResp.fromJson(jsonStr);
+
+  static ListsResp? parse(jsonStr) =>
+      ['null', '', null].contains(jsonStr) ? null : ListsResp(jsonStr);
 
   ListsResp.fromJson(jsonRes) {
     asd = jsonRes['asd'] == null ? null : [];
 
     for (var asdItem in asd == null ? [] : jsonRes['asd']) {
-      List<List<int>> asdChild = asdItem == null ? null : [];
+      List<List<int?>?>? asdChild = asdItem == null ? null : [];
       for (var asdItemItem in asdChild == null ? [] : asdItem) {
-        List<int> asdChildChild = asdItemItem == null ? null : [];
+        List<int?>? asdChildChild = asdItemItem == null ? null : [];
         for (var asdItemItemItem in asdChildChild == null ? [] : asdItemItem) {
-          asdChildChild.add(asdItemItemItem);
+          asdChildChild!.add(asdItemItemItem);
         }
-        asdChild.add(asdChildChild);
+        asdChild!.add(asdChildChild);
       }
-      asd.add(asdChild);
+      asd!.add(asdChild);
     }
 
     qaz = jsonRes['qaz'] == null ? null : [];
 
     for (var qazItem in qaz == null ? [] : jsonRes['qaz']) {
-      qaz.add(qazItem);
+      qaz!.add(qazItem);
     }
 
     qwe = jsonRes['qwe'] == null ? null : [];
 
     for (var qweItem in qwe == null ? [] : jsonRes['qwe']) {
-      List<List<Zxc>> qweChild = qweItem == null ? null : [];
+      List<List<Zxc?>?>? qweChild = qweItem == null ? null : [];
       for (var qweItemItem in qweChild == null ? [] : qweItem) {
-        List<Zxc> qweChildChild = qweItemItem == null ? null : [];
+        List<Zxc?>? qweChildChild = qweItemItem == null ? null : [];
         for (var qweItemItemItem in qweChildChild == null ? [] : qweItemItem) {
-          qweChildChild.add(
+          qweChildChild!.add(
               qweItemItemItem == null ? null : Zxc.fromJson(qweItemItemItem));
         }
-        qweChild.add(qweChildChild);
+        qweChild!.add(qweChildChild);
       }
-      qwe.add(qweChild);
+      qwe!.add(qweChild);
     }
   }
 
@@ -54,10 +55,12 @@ class ListsResp {
   String toString() {
     return '{"asd": $asd, "qaz": $qaz, "qwe": $qwe}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Zxc {
-  int zxc;
+  int? zxc;
 
   Zxc.fromParams({this.zxc});
 
@@ -69,4 +72,6 @@ class Zxc {
   String toString() {
     return '{"zxc": $zxc}';
   }
+
+  String toJSON() => this.toString();
 }

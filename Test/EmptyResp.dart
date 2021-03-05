@@ -1,15 +1,16 @@
 import 'dart:convert' show json;
 
 class EmptyResp {
-  Qwe qwe;
+  Qwe? qwe;
 
   EmptyResp.fromParams({this.qwe});
 
-  factory EmptyResp(jsonStr) => jsonStr == null
-      ? null
-      : jsonStr is String
-          ? EmptyResp.fromJson(json.decode(jsonStr))
-          : EmptyResp.fromJson(jsonStr);
+  factory EmptyResp(jsonStr) => jsonStr is String
+      ? EmptyResp.fromJson(json.decode(jsonStr))
+      : EmptyResp.fromJson(jsonStr);
+
+  static EmptyResp? parse(jsonStr) =>
+      ['null', '', null].contains(jsonStr) ? null : EmptyResp(jsonStr);
 
   EmptyResp.fromJson(jsonRes) {
     qwe = jsonRes['qwe'] == null ? null : Qwe.fromJson(jsonRes['qwe']);
@@ -19,12 +20,14 @@ class EmptyResp {
   String toString() {
     return '{"qwe": $qwe}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Qwe {
-  List<dynamic> asd;
-  List<Object> qaz;
-  List<dynamic> zxc;
+  List<dynamic?>? asd;
+  List<Object?>? qaz;
+  List<dynamic?>? zxc;
 
   Qwe.fromParams({this.asd, this.qaz, this.zxc});
 
@@ -32,19 +35,19 @@ class Qwe {
     asd = jsonRes['asd'] == null ? null : [];
 
     for (var asdItem in asd == null ? [] : jsonRes['asd']) {
-      asd.add(asdItem);
+      asd!.add(asdItem);
     }
 
     qaz = jsonRes['qaz'] == null ? null : [];
 
     for (var qazItem in qaz == null ? [] : jsonRes['qaz']) {
-      qaz.add(qazItem);
+      qaz!.add(qazItem);
     }
 
     zxc = jsonRes['zxc'] == null ? null : [];
 
     for (var zxcItem in zxc == null ? [] : jsonRes['zxc']) {
-      zxc.add(zxcItem);
+      zxc!.add(zxcItem);
     }
   }
 
@@ -52,4 +55,6 @@ class Qwe {
   String toString() {
     return '{"asd": $asd, "qaz": $qaz, "zxc": $zxc}';
   }
+
+  String toJSON() => this.toString();
 }
