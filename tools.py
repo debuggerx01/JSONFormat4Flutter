@@ -57,7 +57,7 @@ def check_level_type(t):
 
 def list_code_loop(code, count, total, n, ct):
     list_count = 'List<' * (total - count)
-    ab_count = '>' * (total - count)
+    ab_count = '?>' * (total - count) + '?'
 
     current_child = 'Child' * count
     child_child = 'Child' * (count + 1)
@@ -75,7 +75,7 @@ def list_code_loop(code, count, total, n, ct):
 
 # 向代码模板中插入变量
 def build_list_construction(t, f, n):
-    class_type = t.replace('List<', '').replace('>', '')
+    class_type = t.replace('List<', '').replace('>', '').replace('?', '')
 
     list_loop = 'jsonRes[\'%s\'] == null ? null : [];\n' % f
     assert isinstance(t, str)
@@ -102,7 +102,7 @@ def add_param_to_code(code, param):
     (f, t, n) = param
 
     # 先按照基本数据类型方式处理
-    properties = '  %s %s;\n' % (t, n)
+    properties = '  %s? %s;\n' % (t, n)
     this_properties = 'this.%s, ' % n
     construction = '    %s = jsonRes[\'%s\'];\n' % (n, f)
     to_string = '"%s": $%s, ' % (f, n)
@@ -122,7 +122,7 @@ def add_param_to_code(code, param):
     t_code = check_level_type(t)
 
     # 字符串类型、List<String>类型和Map类型处理,需要修改toString中的输出方式
-    if t_code in [0, 2] or 'List<String>' in t:
+    if t_code in [0, 2] or 'List<String?>' in t:
         code = code.replace(': $%s' % n, ': ${%s != null?\'${json.encode(%s)}\':\'null\'}' % (n, n))
 
     # dict类型处理，只需要修改construction中的输出方式
@@ -174,6 +174,9 @@ def build_level_code(level_bean):
                         child_bean.append(level_bean.pop(0))
                     build_level_code(child_bean)
 
+                if t != 'List<>':
+                    t = t.replace('>', '?>')
+
             # 不管如何，到这里的数据都是目前dict的一级子数据，作为参数传入模板中
             code = add_param_to_code(code, (f, t, n))
         codes.append(code.replace(', ${toString}', '').replace('${construction}', '').replace('${properties}', '').replace('${this.properties}', ''))
@@ -205,7 +208,7 @@ def generate_code(work_bean):
         res = res.replace('jsonRes[\'json_list\']', 'jsonRes', 2)
 
     # 如果json中存在空list这种操蛋情况，将list类型从list<>修改成list<dynamic>
-    res = res.replace('List<>', 'List<dynamic>')
+    res = res.replace('List<>', 'List<dynamic?>')
 
     # 移除参数构造函数用模板生成后多余的逗号和空格
     res = res.replace(', });', '});')
@@ -225,9 +228,10 @@ def generate_code(work_bean):
         out_res += (line + '\n')
         if first and r'.fromParams({this.' in line:
             class_name = line.split(r'.fromParams({this.')[0].strip()
-            out_res += '\n  factory %s(jsonStr) => [\'null\', \'\', null].contains(jsonStr) ? null : ' \
-                       'jsonStr is String ? %s.fromJson(json.decode(jsonStr)) : %s.fromJson(jsonStr);\n' \
+            out_res += '\n  factory %s(Object jsonStr) => jsonStr is String ? %s.fromJson(json.decode(jsonStr)) : %s.fromJson(jsonStr);\n' \
                        % (class_name, class_name, class_name)
+            out_res += '\n  static %s? parse(jsonStr) => [\'null\', \'\', null].contains(jsonStr) ? null : %s(jsonStr);\n' \
+                       % (class_name, class_name)
             first = False
     return out_res
 

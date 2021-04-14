@@ -21,6 +21,8 @@ ${construction}
   String toString() {
     return '{${toString}}';
   }
+  
+  String toJson() => this.toString();
 }
 
 """
@@ -29,7 +31,7 @@ template_list = r"""
   ${list_count}${class_type}${>count} ${name}${current_child} = ${name}${parent_items} == null ? null : [];
     for (var ${name}${current_items} in ${name}${current_child} == null ? [] : ${name}${parent_items}){
       ${loop}
-      ${name}${current_child}.add(${name}${child_child});
+      ${name}${current_child}!.add(${name}${child_child});
     }
 """
 

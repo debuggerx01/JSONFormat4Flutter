@@ -1,15 +1,16 @@
 import 'dart:convert' show json;
 
 class IgnoreMapResp {
-  Data data;
+  Data? data;
 
   IgnoreMapResp.fromParams({this.data});
 
-  factory IgnoreMapResp(jsonStr) => jsonStr == null
-      ? null
-      : jsonStr is String
-          ? IgnoreMapResp.fromJson(json.decode(jsonStr))
-          : IgnoreMapResp.fromJson(jsonStr);
+  factory IgnoreMapResp(Object jsonStr) => jsonStr is String
+      ? IgnoreMapResp.fromJson(json.decode(jsonStr))
+      : IgnoreMapResp.fromJson(jsonStr);
+
+  static IgnoreMapResp? parse(jsonStr) =>
+      ['null', '', null].contains(jsonStr) ? null : IgnoreMapResp(jsonStr);
 
   IgnoreMapResp.fromJson(jsonRes) {
     data = jsonRes['data'] == null ? null : Data.fromJson(jsonRes['data']);
@@ -19,16 +20,18 @@ class IgnoreMapResp {
   String toString() {
     return '{"data": $data}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Data {
-  int wc;
-  String author;
-  String content;
-  String digest;
-  String title;
-  Map<String, dynamic> date;
-  Extra extra;
+  int? wc;
+  String? author;
+  String? content;
+  String? digest;
+  String? title;
+  Map<String, dynamic>? date;
+  Extra? extra;
 
   Data.fromParams(
       {this.wc,
@@ -53,12 +56,14 @@ class Data {
   String toString() {
     return '{"wc": $wc, "author": ${author != null ? '${json.encode(author)}' : 'null'}, "content": ${content != null ? '${json.encode(content)}' : 'null'}, "digest": ${digest != null ? '${json.encode(digest)}' : 'null'}, "title": ${title != null ? '${json.encode(title)}' : 'null'}, "date": ${date != null ? '${json.encode(date)}' : 'null'}, "extra": $extra}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Extra {
-  int a;
-  int b;
-  int c;
+  int? a;
+  int? b;
+  int? c;
 
   Extra.fromParams({this.a, this.b, this.c});
 
@@ -72,4 +77,6 @@ class Extra {
   String toString() {
     return '{"a": $a, "b": $b, "c": $c}';
   }
+
+  String toJSON() => this.toString();
 }

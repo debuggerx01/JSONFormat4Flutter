@@ -1,18 +1,19 @@
 import 'dart:convert' show json;
 
 class RegionResp {
-  int code;
-  int ttl;
-  String message;
-  Data data;
+  int? code;
+  int? ttl;
+  String? message;
+  Data? data;
 
   RegionResp.fromParams({this.code, this.ttl, this.message, this.data});
 
-  factory RegionResp(jsonStr) => jsonStr == null
-      ? null
-      : jsonStr is String
-          ? RegionResp.fromJson(json.decode(jsonStr))
-          : RegionResp.fromJson(jsonStr);
+  factory RegionResp(Object jsonStr) => jsonStr is String
+      ? RegionResp.fromJson(json.decode(jsonStr))
+      : RegionResp.fromJson(jsonStr);
+
+  static RegionResp? parse(jsonStr) =>
+      ['null', '', null].contains(jsonStr) ? null : RegionResp(jsonStr);
 
   RegionResp.fromJson(jsonRes) {
     code = jsonRes['code'];
@@ -25,11 +26,13 @@ class RegionResp {
   String toString() {
     return '{"code": $code, "ttl": $ttl, "message": ${message != null ? '${json.encode(message)}' : 'null'}, "data": $data}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Data {
-  List<Arch> archives;
-  Page page;
+  List<Arch?>? archives;
+  Page? page;
 
   Data.fromParams({this.archives, this.page});
 
@@ -37,7 +40,7 @@ class Data {
     archives = jsonRes['archives'] == null ? null : [];
 
     for (var archivesItem in archives == null ? [] : jsonRes['archives']) {
-      archives.add(archivesItem == null ? null : Arch.fromJson(archivesItem));
+      archives!.add(archivesItem == null ? null : Arch.fromJson(archivesItem));
     }
 
     page = jsonRes['page'] == null ? null : Page.fromJson(jsonRes['page']);
@@ -47,12 +50,14 @@ class Data {
   String toString() {
     return '{"archives": $archives, "page": $page}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Page {
-  int count;
-  int num;
-  int size;
+  int? count;
+  int? num;
+  int? size;
 
   Page.fromParams({this.count, this.num, this.size});
 
@@ -66,26 +71,28 @@ class Page {
   String toString() {
     return '{"count": $count, "num": $num, "size": $size}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Arch {
-  int aid;
-  int attribute;
-  int copyright;
-  int ctime;
-  int duration;
-  int pubdate;
-  int state;
-  int tid;
-  int videos;
-  String desc;
-  String dynamic;
-  String pic;
-  String title;
-  String tname;
-  Owner owner;
-  Right rights;
-  Stat stat;
+  int? aid;
+  int? attribute;
+  int? copyright;
+  int? ctime;
+  int? duration;
+  int? pubdate;
+  int? state;
+  int? tid;
+  int? videos;
+  String? desc;
+  String? dynamic;
+  String? pic;
+  String? title;
+  String? tname;
+  Owner? owner;
+  Right? rights;
+  Stat? stat;
 
   Arch.fromParams(
       {this.aid,
@@ -131,19 +138,21 @@ class Arch {
   String toString() {
     return '{"aid": $aid, "attribute": $attribute, "copyright": $copyright, "ctime": $ctime, "duration": $duration, "pubdate": $pubdate, "state": $state, "tid": $tid, "videos": $videos, "desc": ${desc != null ? '${json.encode(desc)}' : 'null'}, "dynamic": ${dynamic != null ? '${json.encode(dynamic)}' : 'null'}, "pic": ${pic != null ? '${json.encode(pic)}' : 'null'}, "title": ${title != null ? '${json.encode(title)}' : 'null'}, "tname": ${tname != null ? '${json.encode(tname)}' : 'null'}, "owner": $owner, "rights": $rights, "stat": $stat}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Stat {
-  int aid;
-  int coin;
-  int danmaku;
-  int favorite;
-  int his_rank;
-  int like;
-  int now_rank;
-  int reply;
-  int share;
-  int view;
+  int? aid;
+  int? coin;
+  int? danmaku;
+  int? favorite;
+  int? his_rank;
+  int? like;
+  int? now_rank;
+  int? reply;
+  int? share;
+  int? view;
 
   Stat.fromParams(
       {this.aid,
@@ -174,16 +183,18 @@ class Stat {
   String toString() {
     return '{"aid": $aid, "coin": $coin, "danmaku": $danmaku, "favorite": $favorite, "his_rank": $his_rank, "like": $like, "now_rank": $now_rank, "reply": $reply, "share": $share, "view": $view}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Right {
-  int bp;
-  int download;
-  int elec;
-  int hd5;
-  int movie;
-  int no_reprint;
-  int pay;
+  int? bp;
+  int? download;
+  int? elec;
+  int? hd5;
+  int? movie;
+  int? no_reprint;
+  int? pay;
 
   Right.fromParams(
       {this.bp,
@@ -208,12 +219,14 @@ class Right {
   String toString() {
     return '{"bp": $bp, "download": $download, "elec": $elec, "hd5": $hd5, "movie": $movie, "no_reprint": $no_reprint, "pay": $pay}';
   }
+
+  String toJSON() => this.toString();
 }
 
 class Owner {
-  int mid;
-  String face;
-  String name;
+  int? mid;
+  String? face;
+  String? name;
 
   Owner.fromParams({this.mid, this.face, this.name});
 
@@ -227,4 +240,6 @@ class Owner {
   String toString() {
     return '{"mid": $mid, "face": ${face != null ? '${json.encode(face)}' : 'null'}, "name": ${name != null ? '${json.encode(name)}' : 'null'}}';
   }
+
+  String toJSON() => this.toString();
 }
