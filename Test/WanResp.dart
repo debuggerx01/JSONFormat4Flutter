@@ -29,7 +29,7 @@ class WanResp {
     return '{"errorCode": $errorCode, "errorMsg": ${errorMsg != null ? '${json.encode(errorMsg)}' : 'null'}, "data": $data}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Data {
@@ -70,7 +70,7 @@ class Data {
     return '{"courseId": $courseId, "id": $id, "order": $order, "parentChapterId": $parentChapterId, "visible": $visible, "name": ${name != null ? '${json.encode(name)}' : 'null'}, "children": $children}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Children {
@@ -110,5 +110,5 @@ class Children {
     return '{"courseId": $courseId, "id": $id, "order": $order, "parentChapterId": $parentChapterId, "visible": $visible, "name": ${name != null ? '${json.encode(name)}' : 'null'}, "children": $children}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }

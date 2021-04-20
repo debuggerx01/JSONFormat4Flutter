@@ -56,7 +56,7 @@ class ListsResp {
     return '{"asd": $asd, "qaz": $qaz, "qwe": $qwe}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Zxc {
@@ -73,5 +73,5 @@ class Zxc {
     return '{"zxc": $zxc}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }

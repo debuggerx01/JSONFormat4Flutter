@@ -25,7 +25,7 @@ class ListTopResp {
     return '{"json_list": $list}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Resp {
@@ -44,5 +44,5 @@ class Resp {
     return '{"a": ${a != null ? '${json.encode(a)}' : 'null'}, "b": ${b != null ? '${json.encode(b)}' : 'null'}}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }

@@ -21,7 +21,7 @@ class EmptyResp {
     return '{"qwe": $qwe}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Qwe {
@@ -56,5 +56,5 @@ class Qwe {
     return '{"asd": $asd, "qaz": $qaz, "zxc": $zxc}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }

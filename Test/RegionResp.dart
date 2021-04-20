@@ -27,7 +27,7 @@ class RegionResp {
     return '{"code": $code, "ttl": $ttl, "message": ${message != null ? '${json.encode(message)}' : 'null'}, "data": $data}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Data {
@@ -51,7 +51,7 @@ class Data {
     return '{"archives": $archives, "page": $page}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Page {
@@ -72,7 +72,7 @@ class Page {
     return '{"count": $count, "num": $num, "size": $size}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Arch {
@@ -139,7 +139,7 @@ class Arch {
     return '{"aid": $aid, "attribute": $attribute, "copyright": $copyright, "ctime": $ctime, "duration": $duration, "pubdate": $pubdate, "state": $state, "tid": $tid, "videos": $videos, "desc": ${desc != null ? '${json.encode(desc)}' : 'null'}, "dynamic": ${dynamic != null ? '${json.encode(dynamic)}' : 'null'}, "pic": ${pic != null ? '${json.encode(pic)}' : 'null'}, "title": ${title != null ? '${json.encode(title)}' : 'null'}, "tname": ${tname != null ? '${json.encode(tname)}' : 'null'}, "owner": $owner, "rights": $rights, "stat": $stat}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Stat {
@@ -184,7 +184,7 @@ class Stat {
     return '{"aid": $aid, "coin": $coin, "danmaku": $danmaku, "favorite": $favorite, "his_rank": $his_rank, "like": $like, "now_rank": $now_rank, "reply": $reply, "share": $share, "view": $view}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Right {
@@ -220,7 +220,7 @@ class Right {
     return '{"bp": $bp, "download": $download, "elec": $elec, "hd5": $hd5, "movie": $movie, "no_reprint": $no_reprint, "pay": $pay}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Owner {
@@ -241,5 +241,5 @@ class Owner {
     return '{"mid": $mid, "face": ${face != null ? '${json.encode(face)}' : 'null'}, "name": ${name != null ? '${json.encode(name)}' : 'null'}}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }

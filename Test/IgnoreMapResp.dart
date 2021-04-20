@@ -21,7 +21,7 @@ class IgnoreMapResp {
     return '{"data": $data}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Data {
@@ -57,7 +57,7 @@ class Data {
     return '{"wc": $wc, "author": ${author != null ? '${json.encode(author)}' : 'null'}, "content": ${content != null ? '${json.encode(content)}' : 'null'}, "digest": ${digest != null ? '${json.encode(digest)}' : 'null'}, "title": ${title != null ? '${json.encode(title)}' : 'null'}, "date": ${date != null ? '${json.encode(date)}' : 'null'}, "extra": $extra}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Extra {
@@ -78,5 +78,5 @@ class Extra {
     return '{"a": $a, "b": $b, "c": $c}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }

@@ -43,7 +43,7 @@ class ListWithStringResp {
     return '{"asd": ${asd != null ? '${json.encode(asd)}' : 'null'}, "qaz": ${qaz != null ? '${json.encode(qaz)}' : 'null'}, "zxc": $zxc}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
 
 class Qwe {
@@ -60,5 +60,5 @@ class Qwe {
     return '{"qwe": ${qwe != null ? '${json.encode(qwe)}' : 'null'}}';
   }
 
-  String toJSON() => this.toString();
+  String toJson() => this.toString();
 }
